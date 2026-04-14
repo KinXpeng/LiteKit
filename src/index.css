@@ -37,34 +37,34 @@
 	--light-gradient-start: #0891b2;
 	--light-gradient-end: #6366f1;
 
-	/* 默认主题变量 - 暗色 */
-	--background-color: var(--dark-bg-primary);
-	--background-secondary: var(--dark-bg-secondary);
-	--background-tertiary: var(--dark-bg-tertiary);
-	--background-card: var(--dark-bg-card);
-	--text-primary: var(--dark-text-primary);
-	--text-secondary: var(--dark-text-secondary);
-	--text-tertiary: var(--dark-text-tertiary);
-	--border-color: var(--dark-border);
+	/* 默认主题变量 - 亮色 */
+	--background-color: var(--light-bg-primary);
+	--background-secondary: var(--light-bg-secondary);
+	--background-tertiary: var(--light-bg-tertiary);
+	--background-card: var(--light-bg-card);
+	--text-primary: var(--light-text-primary);
+	--text-secondary: var(--light-text-secondary);
+	--text-tertiary: var(--light-text-tertiary);
+	--border-color: var(--light-border);
 	--accent-color: #0891b2;
 	--accent-hover: #0e7490;
-	--glow-color: rgba(8, 145, 178, 0.35);
+	--glow-color: rgba(8, 145, 178, 0.25);
 	--primary-color: #0891b2;
 	--primary-gradient: linear-gradient(135deg, #19b7a4 0%, #5b21b6 100%);
 	--hero-gradient: linear-gradient(
 		135deg,
-		#030712 0%,
-		#0f172a 50%,
-		#1e293b 100%
+		#ffffff 0%,
+		#f8fafc 50%,
+		#f1f5f9 100%
 	);
 	--card-gradient: linear-gradient(
 		135deg,
-		rgba(15, 23, 42, 0.9) 0%,
-		rgba(30, 41, 59, 0.95) 100%
+		rgba(255, 255, 255, 0.95) 0%,
+		rgba(248, 250, 252, 0.98) 100%
 	);
 	--card-background: var(--background-secondary);
-	--gradient-start: var(--dark-gradient-start);
-	--gradient-end: var(--dark-gradient-end);
+	--gradient-start: var(--light-gradient-start);
+	--gradient-end: var(--light-gradient-end);
 
 	/* 字体 */
 	font-family:
@@ -73,7 +73,7 @@
 	line-height: 1.6;
 	font-weight: 400;
 
-	color-scheme: dark;
+	color-scheme: light;
 	color: var(--text-primary);
 	background-color: var(--background-color);
 
@@ -144,7 +144,7 @@ body {
 	);
 	--gradient-start: var(--dark-gradient-start);
 	--gradient-end: var(--dark-gradient-end);
-	color-scheme: dark;
+	color-scheme: light;
 }
 
 /* 亮色主题 */

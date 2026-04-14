@@ -1,13 +1,17 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { appConfig } from '../../configs'
 
 interface HeaderProps {
   theme?: 'dark' | 'light'
   onThemeChange?: (isDark: boolean) => void
 }
 
-const Header = ({ theme = 'dark', onThemeChange }: HeaderProps) => {
-  const [isDarkMode, setIsDarkMode] = useState(theme === 'dark')
+const Header = ({ theme, onThemeChange }: HeaderProps) => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const defaultTheme = theme ?? appConfig.theme.defaultTheme
+    return defaultTheme === 'dark'
+  })
   const location = useLocation()
 
   useEffect(() => {
@@ -24,13 +28,6 @@ const Header = ({ theme = 'dark', onThemeChange }: HeaderProps) => {
   const handleThemeToggle = () => {
     setIsDarkMode(!isDarkMode)
   }
-
-  const navLinks = [
-    { path: '/', label: '首页' },
-    { path: '/features', label: '功能' },
-    { path: '/file-converter', label: '文件转换' },
-    { path: '/image-cropper', label: '图片裁剪' }
-  ]
 
   return (
     <nav
@@ -60,7 +57,7 @@ const Header = ({ theme = 'dark', onThemeChange }: HeaderProps) => {
                   backgroundClip: 'text'
                 }}
               >
-                K
+                {appConfig.logo.icon}
               </span>
             </div>
             <span
@@ -72,36 +69,23 @@ const Header = ({ theme = 'dark', onThemeChange }: HeaderProps) => {
                 backgroundClip: 'text'
               }}
             >
-              轻序 / LiteKit
+              {appConfig.logo.text}
             </span>
           </div>
 
           {/* 导航链接 */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map(link => (
+          <div className="hidden lg:flex items-center gap-2">
+            {appConfig.navigation.links.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="relative px-5 py-2.5 text-base font-medium transition-all duration-300"
+                className="relative px-4 py-2 text-base font-medium transition-all duration-300 rounded-full"
                 style={{
-                  color: location.pathname === link.path ? 'var(--primary-color)' : 'var(--text-secondary)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'var(--primary-color)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = location.pathname === link.path ? 'var(--primary-color)' : 'var(--text-secondary)';
+                  color: location.pathname === link.path ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  backgroundColor: location.pathname === link.path ? 'var(--background-tertiary)' : 'transparent'
                 }}
               >
                 {link.label}
-                {location.pathname === link.path && (
-                  <div
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full"
-                    style={{
-                      background: 'var(--primary-gradient)'
-                    }}
-                  />
-                )}
               </Link>
             ))}
           </div>
@@ -134,7 +118,7 @@ const Header = ({ theme = 'dark', onThemeChange }: HeaderProps) => {
       {/* 移动端菜单 */}
       <div className="lg:hidden border-t" style={{ borderColor: 'var(--border-color)' }}>
         <div className="px-4 py-4 space-y-2">
-          {navLinks.map(link => (
+          {appConfig.navigation.links.map(link => (
             <Link
               key={link.path}
               to={link.path}
