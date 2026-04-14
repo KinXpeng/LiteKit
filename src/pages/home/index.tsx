@@ -21,7 +21,7 @@ const Home = () => {
 
       {/* 主内容 */}
       <div className="relative z-10 flex-grow flex flex-col justify-center items-center px-6 py-32">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           {/* 主标题区域 */}
           <div
             className={`mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
@@ -29,13 +29,13 @@ const Home = () => {
             <h1
               className="font-bold tracking-tight mb-6"
               style={{
-                fontSize: 'clamp(4rem, 12vw, 8rem)',
+                fontSize: 'clamp(4rem, 12vw, 7rem)',
                 lineHeight: '1',
                 color: 'var(--text-primary)',
                 letterSpacing: '-0.02em'
               }}
             >
-              <span 
+              <span
                 className="italic"
                 style={{
                   background: 'var(--primary-gradient)',
@@ -45,10 +45,10 @@ const Home = () => {
                   fontWeight: '800'
                 }}
               >
-                LiteKit
+                Reliable LiteKit, work more efficiently.
               </span>
             </h1>
-            
+
             <p
               className="text-xl md:text-2xl font-medium"
               style={{
@@ -56,7 +56,7 @@ const Home = () => {
                 letterSpacing: '0.05em'
               }}
             >
-              智能工具集，让工作更高效
+              可靠“轻序”，让工作更高效
             </p>
           </div>
 
