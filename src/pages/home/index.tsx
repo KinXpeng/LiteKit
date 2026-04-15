@@ -28,63 +28,63 @@ const Home = () => {
       {/* High-Tech Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Main gradient orb - top left */}
-        <div 
+        <div
           className="absolute w-[600px] h-[600px] rounded-full blur-[120px] opacity-10"
-          style={{ 
+          style={{
             background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)',
             top: '-10%',
             left: '-5%',
           }}
         />
-        
+
         {/* Secondary orb - bottom right */}
-        <div 
+        <div
           className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-8"
-          style={{ 
+          style={{
             background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
             bottom: '-10%',
             right: '-5%',
           }}
         />
-        
+
         {/* Accent orb - center */}
-        <div 
+        <div
           className="absolute w-[400px] h-[400px] rounded-full blur-[80px] opacity-5"
-          style={{ 
+          style={{
             background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)',
             top: '40%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
           }}
         />
-        
+
         {/* Subtle grid pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage: 'linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px)',
             backgroundSize: '80px 80px',
           }}
         />
-        
+
         {/* Noise texture overlay */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }} />
       </div>
-      
+
       {/* Main Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-20">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-10">
         {/* Header Section */}
         <div className={`text-center ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
-          
+
           {/* Main Title */}
           <div className="mb-6">
-            <h1 
+            <h1
               className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-relaxed"
               style={{ color: 'var(--text)' }}
             >
-              <span style={{ 
+              <span style={{
                 background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -94,15 +94,15 @@ const Home = () => {
               <span style={{ color: 'var(--text)' }}>，才是对的</span>
             </h1>
           </div>
-          
+
           {/* Subtitle with animated transition */}
           <div className="h-12 flex items-center justify-center mb-8">
-            <p 
+            <p
               key={currentTagline}
               className="text-lg md:text-xl transition-all duration-500"
               style={{ color: 'var(--text-secondary)' }}
             >
-              <span style={{ 
+              <span style={{
                 background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -113,14 +113,14 @@ const Home = () => {
               <span className="text-sm tracking-widest uppercase">{taglines[currentTagline].en}</span>
             </p>
           </div>
-          
+
           {/* Description */}
           <p className="text-base max-w-2xl mx-auto leading-relaxed mb-12" style={{ color: 'var(--text-muted)' }}>
             一款专注于效率与隐私的轻量级工具平台。所有功能均在浏览器本地运行，
             <br className="hidden md:block" />
             无需上传、无需等待、即开即用，让您的数据始终掌控在您手中。
           </p>
-          
+
           {/* CTA Buttons */}
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/file-converter">
@@ -177,15 +177,15 @@ const Home = () => {
               desc: '开源项目，无广告、无追踪、无付费功能',
             },
           ].map((item, i) => (
-            <div 
+            <div
               key={i}
               className="p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1"
-              style={{ 
+              style={{
                 backgroundColor: 'var(--bg-card)',
                 border: '1px solid var(--border)',
               }}
             >
-              <div 
+              <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
                 style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--accent)' }}
               >
@@ -201,29 +201,35 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Tech Stack */}
-        <div className={`mt-16 text-center ${isLoaded ? 'animate-slideUp delay-300' : 'opacity-0'}`}>
-          <p className="text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--text-muted)' }}>
-            Built With
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
+        {/* Stats / Trust Badges */}
+        <div className={`mt-12 ${isLoaded ? 'animate-slideUp delay-300' : 'opacity-0'}`}>
+          <div className="flex justify-center gap-8">
             {[
-              { name: 'React', color: '#61DAFB' },
-              { name: 'TypeScript', color: '#3178C6' },
-              { name: 'Vite', color: '#646CFF' },
-              { name: 'Tailwind', color: '#38BDF8' },
-            ].map((tech) => (
-              <span 
-                key={tech.name} 
-                className="px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 hover:scale-105"
-                style={{ 
-                  backgroundColor: `${tech.color}15`,
-                  color: tech.color,
-                  border: `1px solid ${tech.color}30`,
-                }}
+              { value: '100%', label: '本地处理' },
+              { value: '0KB', label: '上传大小' },
+              { value: '∞', label: '无限使用' },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                className="text-center px-4 py-2"
               >
-                {tech.name}
-              </span>
+                <span
+                  className="text-2xl font-bold"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  {stat.value}
+                </span>
+                <span
+                  className="block text-xs mt-1"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  {stat.label}
+                </span>
+              </div>
             ))}
           </div>
         </div>

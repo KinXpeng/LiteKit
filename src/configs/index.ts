@@ -28,7 +28,7 @@ export const appConfig = {
       { path: '/', label: '首页' },
       { path: '/lab', label: '实验室' },
       { path: '/file-converter', label: '文件转换' },
-      { path: '/image-cropper', label: '图片裁剪' },
+      { path: '/image-processor', label: '图片处理' },
     ],
   },
 

@@ -16,9 +16,9 @@ const Lab = () => {
   ]
 
   type StatusType = 'completed' | 'in-progress' | 'planned'
-  
+
   const roadmap = [
-    { phase: 'Phase 1', title: '基础工具集', status: 'completed' as StatusType, items: ['文件转换', '图片裁剪'] },
+    { phase: 'Phase 1', title: '基础工具集', status: 'completed' as StatusType, items: ['文件转换', '图片处理'] },
     { phase: 'Phase 2', title: '效率工具', status: 'in-progress' as StatusType, items: ['批量处理', '格式优化'] },
     { phase: 'Phase 3', title: '协作功能', status: 'planned' as StatusType, items: ['云同步', '团队共享'] },
   ]
@@ -33,7 +33,7 @@ const Lab = () => {
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Background Effects */}
       <div className="bg-pattern" />
-      
+
       {/* Content */}
       <div className="relative z-10 max-w-3xl mx-auto px-6 pt-32 pb-20">
         {/* Hero Section */}
@@ -65,7 +65,7 @@ const Lab = () => {
               </svg>
             </div>
           </div>
-          
+
           <h1 className="text-4xl font-bold mb-4">
             <span className="gradient-text">LiteKit 实验室</span>
           </h1>
@@ -99,12 +99,12 @@ const Lab = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {technologies.map((tech, index) => (
-              <div 
+              <div
                 key={tech.name}
                 className="card p-4 text-center"
                 style={{ animationDelay: `${index * 50 + 200}ms` }}
               >
-                <div 
+                <div
                   className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center text-lg font-bold"
                   style={{ backgroundColor: `${tech.color}20`, color: tech.color }}
                 >
@@ -124,14 +124,14 @@ const Lab = () => {
           </h2>
           <div className="space-y-4">
             {roadmap.map((phase, index) => (
-              <div 
+              <div
                 key={phase.phase}
                 className="card p-5"
                 style={{ animationDelay: `${index * 50 + 300}ms` }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <span 
+                    <span
                       className="px-2 py-1 rounded-lg text-xs font-medium"
                       style={{ backgroundColor: `${statusColors[phase.status]}20`, color: statusColors[phase.status] }}
                     >
@@ -140,7 +140,7 @@ const Lab = () => {
                     <h3 className="font-medium" style={{ color: 'var(--text)' }}>{phase.title}</h3>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div 
+                    <div
                       className="w-2 h-2 rounded-full"
                       style={{ backgroundColor: statusColors[phase.status] }}
                     />
@@ -151,7 +151,7 @@ const Lab = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {phase.items.map(item => (
-                    <span 
+                    <span
                       key={item}
                       className="px-3 py-1 rounded-full text-xs"
                       style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}

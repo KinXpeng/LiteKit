@@ -3,7 +3,7 @@ import Header from './components/header'
 import Home from './pages/home/index'
 import Lab from './pages/lab/index'
 import FileConverter from './pages/file-converter/index'
-import ImageCropper from './pages/image-cropper/index'
+import ImageProcessor from './pages/image-processor/index'
 
 const App = () => {
   return (
@@ -18,7 +18,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/lab" element={<Lab />} />
             <Route path="/file-converter" element={<FileConverter />} />
-            <Route path="/image-cropper" element={<ImageCropper />} />
+            <Route path="/image-processor" element={<ImageProcessor />} />
           </Routes>
         </div>
       </div>

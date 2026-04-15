@@ -1,11 +1,11 @@
 import Home from '../../pages/home';
 import Lab from '../../pages/lab';
 import FileConverter from '../../pages/file-converter';
-import ImageCropper from '../../pages/image-cropper';
+import ImageProcessor from '../../pages/image-processor';
 
 export {
   Home,
   Lab,
   FileConverter,
-  ImageCropper
+  ImageProcessor
 };

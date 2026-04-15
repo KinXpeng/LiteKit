@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Home, Lab, FileConverter, ImageCropper } from './modules';
+import { Home, Lab, FileConverter, ImageProcessor } from './modules';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={<Home />} />
       <Route path="/lab" element={<Lab />} />
       <Route path="/file-converter" element={<FileConverter />} />
-      <Route path="/image-cropper" element={<ImageCropper />} />
+      <Route path="/image-processor" element={<ImageProcessor />} />
     </Routes>
   );
 };
