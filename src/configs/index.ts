@@ -26,7 +26,7 @@ export const appConfig = {
     // 导航链接
     links: [
       { path: '/', label: '首页' },
-      { path: '/features', label: '功能' },
+      { path: '/lab', label: '实验室' },
       { path: '/file-converter', label: '文件转换' },
       { path: '/image-cropper', label: '图片裁剪' },
     ],

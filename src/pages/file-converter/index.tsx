@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Upload } from 'antd'
-import { Icon } from '@iconify/react'
-import uploadIcon from '@iconify/icons-material-symbols/cloud-upload'
-import downloadIcon from '@iconify/icons-material-symbols/download'
 
 const FileConverter = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -12,20 +9,25 @@ const FileConverter = () => {
   const [converting, setConverting] = useState(false)
 
   useEffect(() => {
-    setIsLoaded(true)
+    const timer = setTimeout(() => setIsLoaded(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   const handleConvert = () => {
     if (!selectedFile) return
 
     setConverting(true)
-    
-    // 模拟转换过程
+
     setTimeout(() => {
-      // 模拟创建一个转换后的文件
-      const mockConvertedFile = new File(['Mock converted content'], 'converted-file.' + (conversionType === 'pdf-to-word' ? 'docx' : 'pdf'), {
-        type: conversionType === 'pdf-to-word' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf'
-      })
+      const mockConvertedFile = new File(
+        ['Mock converted content'],
+        'converted-file.' + (conversionType === 'pdf-to-word' ? 'docx' : 'pdf'),
+        {
+          type: conversionType === 'pdf-to-word'
+            ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            : 'application/pdf',
+        }
+      )
       setConvertedFile(mockConvertedFile)
       setConverting(false)
     }, 2000)
@@ -34,7 +36,6 @@ const FileConverter = () => {
   const handleDownload = () => {
     if (!convertedFile) return
 
-    // 创建下载链接
     const url = URL.createObjectURL(convertedFile)
     const a = document.createElement('a')
     a.href = url
@@ -45,211 +46,139 @@ const FileConverter = () => {
     URL.revokeObjectURL(url)
   }
 
-  return (
-    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--background-color)' }}>
-      {/* 背景效果 */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* 动态网格 */}
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `
-              linear-gradient(var(--border-color) 1px, transparent 1px),
-              linear-gradient(90deg, var(--border-color) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }}
-        ></div>
-        
-        {/* 渐变光晕 */}
-        <div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: 'linear-gradient(135deg, #0891b2, #5b21b6)', opacity: 0.12 }}
-        ></div>
-        <div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', opacity: 0.1, animationDelay: '1.5s' }}
-        ></div>
-      </div>
+  const handleReset = () => {
+    setSelectedFile(null)
+    setConvertedFile(null)
+  }
 
-      {/* 内容 */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-6 lg:px-8 py-24">
-        {/* 头部 */}
-        <div 
-          className={`mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-        >
-          <div>
-            <h1 
-              className="font-bold mb-4"
-              style={{ 
-                fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-                lineHeight: '1.1'
-              }}
-            >
-              <span style={{ 
-                background: 'var(--primary-gradient)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-                backgroundClip: 'text'
-              }}>
-                文件转换
-              </span>
-            </h1>
-            <p 
-              className="text-xl"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              快速将PDF与Word文档相互转换
-            </p>
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
+      {/* Background */}
+      <div className="bg-pattern" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-xl mx-auto px-6 pt-32 pb-20">
+        {/* Quick Guide */}
+        <div className={`mb-6 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
+          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' }}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-xs font-medium mb-1" style={{ color: 'var(--text)' }}>使用提示</p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>上传文件 → 选择格式 → 转换 → 下载</p>
+            </div>
           </div>
         </div>
 
-        {/* 转换器内容 */}
-        <div 
-          className={`max-w-3xl mx-auto transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          style={{ animationDelay: '0.2s' }}
-        >
-          <div 
-            className="p-8 md:p-12 rounded-3xl border-2 overflow-hidden"
-            style={{ 
-              backgroundColor: 'var(--background-card)',
-              borderColor: 'var(--border-color)',
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            {/* 转换类型选择 */}
-            <div className="flex gap-4 mb-8">
+        {/* Main Card */}
+        <div className={`${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
+          <div className="card p-8">
+            {/* Type Toggle */}
+            <div className="toggle-group w-full mb-6">
               <button
-                onClick={() => setConversionType('pdf-to-word')}
-                className={`flex-1 py-4 px-6 rounded-xl font-semibold transition-all duration-300 ${
-                  conversionType === 'pdf-to-word' ? 'scale-105' : 'hover:scale-102'
-                }`}
-                style={{
-                  backgroundColor: conversionType === 'pdf-to-word' ? 'var(--accent-color)' : 'var(--background-tertiary)',
-                  color: conversionType === 'pdf-to-word' ? 'white' : 'var(--text-primary)',
-                  borderColor: conversionType === 'pdf-to-word' ? 'var(--accent-color)' : 'var(--border-color)',
-                  borderWidth: '2px',
-                  borderStyle: 'solid',
-                  boxShadow: conversionType === 'pdf-to-word' ? '0 8px 30px rgba(8, 145, 178, 0.25)' : 'none'
+                onClick={() => {
+                  setConversionType('pdf-to-word')
+                  handleReset()
                 }}
+                className={`toggle-item flex-1 ${conversionType === 'pdf-to-word' ? 'active' : ''}`}
               >
-                <span className="flex items-center justify-center gap-2">
-                  📄 PDF → Word
-                </span>
+                PDF → Word
               </button>
               <button
-                onClick={() => setConversionType('word-to-pdf')}
-                className={`flex-1 py-4 px-6 rounded-xl font-semibold transition-all duration-300 ${
-                  conversionType === 'word-to-pdf' ? 'scale-105' : 'hover:scale-102'
-                }`}
-                style={{
-                  backgroundColor: conversionType === 'word-to-pdf' ? 'var(--accent-color)' : 'var(--background-tertiary)',
-                  color: conversionType === 'word-to-pdf' ? 'white' : 'var(--text-primary)',
-                  borderColor: conversionType === 'word-to-pdf' ? 'var(--accent-color)' : 'var(--border-color)',
-                  borderWidth: '2px',
-                  borderStyle: 'solid',
-                  boxShadow: conversionType === 'word-to-pdf' ? '0 8px 30px rgba(8, 145, 178, 0.25)' : 'none'
+                onClick={() => {
+                  setConversionType('word-to-pdf')
+                  handleReset()
                 }}
+                className={`toggle-item flex-1 ${conversionType === 'word-to-pdf' ? 'active' : ''}`}
               >
-                <span className="flex items-center justify-center gap-2">
-                  📝 Word → PDF
-                </span>
+                Word → PDF
               </button>
             </div>
 
-            {/* 文件上传 */}
-            <div className="mb-8">
-              <Upload
-                name="file"
-                accept={conversionType === 'pdf-to-word' ? '.pdf' : '.docx,.doc'}
-                showUploadList={false}
-                beforeUpload={(file) => {
-                  setSelectedFile(file)
-                  setConvertedFile(null)
-                  return false
-                }}
-                className="w-full"
-              >
-                <div 
-                  className="border-2 border-dashed rounded-2xl p-12 cursor-pointer transition-all duration-300 hover:scale-102 hover:border-cyan-500 group"
-                  style={{ 
-                    borderColor: selectedFile ? 'var(--accent-color)' : 'var(--border-color)',
-                    backgroundColor: 'var(--background-tertiary)'
-                  }}
-                >
-                  <div className="text-center">
-                    <div 
-                      className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-110"
-                      style={{ background: 'var(--primary-gradient)' }}
-                    >
-                      <Icon icon={uploadIcon} className="text-4xl text-white" />
-                    </div>
-                    <p className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-                      {selectedFile ? selectedFile.name : '点击或拖拽文件到此处'}
-                    </p>
-                    <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                      {conversionType === 'pdf-to-word' ? '支持 .pdf 格式' : '支持 .docx, .doc 格式'}
-                    </p>
+            {/* Upload Zone */}
+            <Upload
+              name="file"
+              accept={conversionType === 'pdf-to-word' ? '.pdf' : '.docx,.doc'}
+              showUploadList={false}
+              beforeUpload={(file) => {
+                setSelectedFile(file)
+                setConvertedFile(null)
+                return false
+              }}
+              className="w-full"
+            >
+              <div className={`upload-zone ${selectedFile ? 'active' : ''}`}>
+                <div className="mb-3">
+                  <div 
+                    className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center"
+                    style={{ background: 'var(--gradient-primary)' }}
+                  >
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
                   </div>
                 </div>
-              </Upload>
-            </div>
+                <p className="font-medium text-sm mb-1" style={{ color: 'var(--text)' }}>
+                  {selectedFile ? selectedFile.name : '点击或拖拽文件到此处'}
+                </p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {conversionType === 'pdf-to-word'
+                    ? '支持 .pdf 格式'
+                    : '支持 .docx, .doc 格式'}
+                </p>
+              </div>
+            </Upload>
 
-            {/* 转换按钮 */}
-            <button
-              onClick={handleConvert}
-              disabled={!selectedFile || converting}
-              className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 ${
-                selectedFile && !converting ? 'hover:scale-105 hover:shadow-2xl cursor-pointer' : 'opacity-50 cursor-not-allowed'
-              }`}
-              style={{
-                background: selectedFile && !converting ? 'var(--primary-gradient)' : 'var(--background-tertiary)',
-                boxShadow: selectedFile && !converting ? '0 8px 30px rgba(8, 145, 178, 0.25)' : 'none'
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                {converting ? (
-                  <>
-                    <span className="animate-spin">⚙️</span>
-                    转换中...
-                  </>
-                ) : (
-                  <>
-                    开始转换
-                    <span>⚡</span>
-                  </>
-                )}
-              </span>
-            </button>
-
-            {/* 下载结果 */}
-            {convertedFile && (
-              <div 
-                className="mt-8 p-8 rounded-2xl border-2 animate-fadeIn"
-                style={{ 
-                  backgroundColor: 'var(--background-tertiary)',
-                  borderColor: 'var(--accent-color)'
-                }}
+            {/* Convert Button */}
+            {selectedFile && !convertedFile && (
+              <button
+                onClick={handleConvert}
+                disabled={converting}
+                className="btn-gradient w-full py-3.5 mt-5 text-sm"
               >
-                <div className="text-center mb-6">
-                  <div className="text-5xl mb-4">✨</div>
-                  <p className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                    转换完成！
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                    您的文件已准备就绪
-                  </p>
+                <span className="flex items-center justify-center gap-2">
+                  {converting ? (
+                    <>
+                      <div className="loading-spinner" />
+                      转换中...
+                    </>
+                  ) : (
+                    <>
+                      开始转换
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </>
+                  )}
+                </span>
+              </button>
+            )}
+
+            {/* Success Result */}
+            {convertedFile && (
+              <div className="success-box mt-5 animate-scaleIn">
+                <div className="success-icon mb-3">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>
+                  转换完成
+                </h3>
+                <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>
+                  您的文件已准备就绪
+                </p>
                 <button
                   onClick={handleDownload}
-                  className="w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                  style={{
-                    background: 'var(--primary-gradient)',
-                    boxShadow: '0 8px 30px rgba(8, 145, 178, 0.25)'
-                  }}
+                  className="btn-gradient w-full py-3 text-sm"
                 >
                   <span className="flex items-center justify-center gap-2">
-                    <Icon icon={downloadIcon} />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
                     下载文件
                   </span>
                 </button>
@@ -258,42 +187,20 @@ const FileConverter = () => {
           </div>
         </div>
 
-        {/* 功能说明 */}
-        <div 
-          className={`mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          style={{ animationDelay: '0.4s' }}
-        >
-          {[
-            { icon: '🚀', title: '极速转换', desc: '采用先进算法，转换速度提升300%' },
-            { icon: '🔒', title: '安全可靠', desc: '本地处理，您的文件不会被上传到服务器' },
-            { icon: '✨', title: '保持格式', desc: '完美还原原始文档的格式和布局' }
-          ].map((feature, index) => (
-            <div 
-              key={index}
-              className="p-6 rounded-2xl border transition-all duration-300 hover:scale-105"
-              style={{ 
-                backgroundColor: 'var(--background-card)',
-                borderColor: 'var(--border-color)'
-              }}
-            >
-              <div className="text-4xl mb-3">{feature.icon}</div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-                {feature.title}
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                {feature.desc}
-              </p>
-            </div>
-          ))}
+        {/* Tips */}
+        <div className={`mt-6 text-center ${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            所有转换在本地完成，保护您的隐私安全
+          </p>
         </div>
       </div>
 
-      {/* 底部 */}
-      <div className="relative z-10 py-8 px-8 text-center">
-        <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+      {/* Footer */}
+      <footer className="relative z-10 py-8 text-center">
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           © 2026 LiteKit. 保留所有权利。
         </p>
-      </div>
+      </footer>
     </div>
   )
 }

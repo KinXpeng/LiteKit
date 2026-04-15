@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/header'
 import Home from './pages/home/index'
-import Features from './pages/features/index'
+import Lab from './pages/lab/index'
 import FileConverter from './pages/file-converter/index'
 import ImageCropper from './pages/image-cropper/index'
 
@@ -16,7 +16,7 @@ const App = () => {
         <div className="pt-20">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/features" element={<Features />} />
+            <Route path="/lab" element={<Lab />} />
             <Route path="/file-converter" element={<FileConverter />} />
             <Route path="/image-cropper" element={<ImageCropper />} />
           </Routes>

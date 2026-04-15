@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { Upload, InputNumber } from 'antd'
-import { Icon } from '@iconify/react'
-import uploadIcon from '@iconify/icons-material-symbols/cloud-upload'
-import downloadIcon from '@iconify/icons-material-symbols/download'
 
 const ImageCropper = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -17,14 +14,51 @@ const ImageCropper = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    setIsLoaded(true)
+    const timer = setTimeout(() => setIsLoaded(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   const presetSizes = [
-    { name: '1寸', width: 295, height: 413, icon: '📇' },
-    { name: '2寸', width: 413, height: 579, icon: '📋' },
-    { name: '身份证', width: 640, height: 480, icon: '🪪' },
-    { name: '正方形', width: 500, height: 500, icon: '⬜' }
+    {
+      name: '1寸',
+      width: 295,
+      height: 413,
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+        </svg>
+      ),
+    },
+    {
+      name: '2寸',
+      width: 413,
+      height: 579,
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      ),
+    },
+    {
+      name: '身份证',
+      width: 640,
+      height: 480,
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+        </svg>
+      ),
+    },
+    {
+      name: '正方形',
+      width: 500,
+      height: 500,
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 9h16" />
+        </svg>
+      ),
+    },
   ]
 
   const handleCrop = () => {
@@ -32,7 +66,6 @@ const ImageCropper = () => {
 
     setCropping(true)
 
-    // 模拟裁剪过程
     setTimeout(() => {
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
@@ -41,14 +74,13 @@ const ImageCropper = () => {
       const img = imageRef.current
       if (!img) return
 
-      const size = presetSizes.find(s => s.name === selectedSize)
+      const size = presetSizes.find((s) => s.name === selectedSize)
       const width = size ? size.width : parseInt(customWidth) || 500
       const height = size ? size.height : parseInt(customHeight) || 500
 
       canvas.width = width
       canvas.height = height
 
-      // 简单的居中裁剪
       const imgWidth = img.width
       const imgHeight = img.height
       const imgRatio = imgWidth / imgHeight
@@ -70,7 +102,6 @@ const ImageCropper = () => {
 
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight, 0, 0, width, height)
 
-      // 转换为DataURL
       const croppedUrl = canvas.toDataURL('image/png')
       setCroppedImage(croppedUrl)
       setCropping(false)
@@ -80,7 +111,6 @@ const ImageCropper = () => {
   const handleDownload = () => {
     if (!croppedImage) return
 
-    // 创建下载链接
     const link = document.createElement('a')
     link.href = croppedImage
     link.download = 'cropped-image.png'
@@ -90,213 +120,129 @@ const ImageCropper = () => {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--background-color)' }}>
-      {/* 背景效果 */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* 动态网格 */}
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `
-              linear-gradient(var(--border-color) 1px, transparent 1px),
-              linear-gradient(90deg, var(--border-color) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }}
-        ></div>
-        
-        {/* 渐变光晕 */}
-        <div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: 'linear-gradient(135deg, #0891b2, #5b21b6)', opacity: 0.12 }}
-        ></div>
-        <div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', opacity: 0.1, animationDelay: '1.5s' }}
-        ></div>
-      </div>
-
-      {/* 内容 */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 py-24">
-        {/* 头部 */}
-        <div 
-          className={`mb-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-        >
-          <div>
-            <h1 
-              className="font-bold mb-4"
-              style={{ 
-                fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-                lineHeight: '1.1'
-              }}
-            >
-              <span style={{ 
-                background: 'var(--primary-gradient)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-                backgroundClip: 'text'
-              }}>
-                图片裁剪
-              </span>
-            </h1>
-            <p 
-              className="text-xl"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              支持多种预设尺寸，轻松裁剪证件照
-            </p>
+    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
+      {/* Background */}
+      <div className="bg-pattern" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-xl mx-auto px-6 pt-32 pb-20">
+        {/* Quick Guide */}
+        <div className={`mb-6 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
+          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-xs font-medium mb-1" style={{ color: 'var(--text)' }}>使用提示</p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>上传图片 → 选择尺寸 → 裁剪 → 下载</p>
+            </div>
           </div>
         </div>
 
-        {/* 裁剪器内容 */}
-        <div 
-          className={`max-w-5xl mx-auto transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          style={{ animationDelay: '0.2s' }}
-        >
-          <div 
-            className="p-8 md:p-12 rounded-3xl border-2 overflow-hidden"
-            style={{ 
-              backgroundColor: 'var(--background-card)',
-              borderColor: 'var(--border-color)',
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            {/* 文件上传 */}
-            <div className="mb-8">
-              <Upload
-                name="file"
-                accept="image/*"
-                showUploadList={false}
-                beforeUpload={(file) => {
-                  setSelectedFile(file)
-                  const url = URL.createObjectURL(file)
-                  setImageUrl(url)
-                  setCroppedImage(null)
-                  return false
-                }}
-                className="w-full"
-              >
-                <div 
-                  className="border-2 border-dashed rounded-2xl p-12 cursor-pointer transition-all duration-300 hover:scale-102 hover:border-cyan-500 group"
-                  style={{ 
-                    borderColor: selectedFile ? 'var(--accent-color)' : 'var(--border-color)',
-                    backgroundColor: 'var(--background-tertiary)'
-                  }}
-                >
-                  <div className="text-center">
-                    <div 
-                      className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 transition-transform duration-300 group-hover:scale-110"
-                      style={{ background: 'var(--primary-gradient)' }}
-                    >
-                      <Icon icon={uploadIcon} className="text-4xl text-white" />
-                    </div>
-                    <p className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-                      {selectedFile ? selectedFile.name : '点击或拖拽图片到此处'}
-                    </p>
-                    <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                      支持 JPG, PNG 等常见图片格式
-                    </p>
+        {/* Main Card */}
+        <div className={`${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
+          <div className="card p-6">
+            {/* Upload Zone */}
+            <Upload
+              name="file"
+              accept="image/*"
+              showUploadList={false}
+              beforeUpload={(file) => {
+                setSelectedFile(file)
+                const url = URL.createObjectURL(file)
+                setImageUrl(url)
+                setCroppedImage(null)
+                return false
+              }}
+              className="w-full"
+            >
+              <div className={`upload-zone ${selectedFile ? 'active' : ''}`}>
+                <div className="mb-3">
+                  <div 
+                    className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center"
+                    style={{ background: 'var(--gradient-primary)' }}
+                  >
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
                   </div>
                 </div>
-              </Upload>
-            </div>
+                <p className="font-medium text-sm mb-1" style={{ color: 'var(--text)' }}>
+                  {selectedFile ? selectedFile.name : '点击或拖拽图片到此处'}
+                </p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                  支持 JPG, PNG 等常见图片格式
+                </p>
+              </div>
+            </Upload>
 
-            {/* 尺寸选择 */}
-            <div className="mb-10">
-              <h3 
-                className="font-bold mb-8"
-                style={{ 
-                  color: 'var(--text-primary)',
-                  fontSize: 'clamp(1.25rem, 2.5vw, 1.5rem)'
-                }}
-              >
-                选择尺寸
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {presetSizes.map(size => (
+            {/* Size Selection */}
+            <div className="mt-6">
+              {/* Size Grid */}
+              <div className="grid grid-cols-4 gap-2 mb-3">
+                {presetSizes.map((size) => (
                   <button
                     key={size.name}
                     onClick={() => setSelectedSize(size.name)}
-                    className={`p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
-                      selectedSize === size.name ? 'scale-105' : ''
-                    }`}
-                    style={{
-                      backgroundColor: selectedSize === size.name ? 'var(--background-tertiary)' : 'var(--background-tertiary)',
-                      borderColor: selectedSize === size.name ? 'var(--accent-color)' : 'var(--border-color)',
-                      borderWidth: selectedSize === size.name ? '2px' : '1px',
-                      color: selectedSize === size.name ? 'var(--accent-color)' : 'var(--text-primary)',
-                      boxShadow: selectedSize === size.name ? '0 0 20px rgba(8, 145, 178, 0.2)' : 'none'
-                    }}
+                    className={`size-card py-3 ${selectedSize === size.name ? 'active' : ''}`}
                   >
-                    <div className="text-3xl mb-2">{size.icon}</div>
-                    <div className="font-semibold mb-1">{size.name}</div>
-                    <div className="text-xs opacity-60">
-                      {size.width} × {size.height}
+                    <div className="mb-1" style={{ color: selectedSize === size.name ? 'var(--accent)' : 'var(--text-muted)' }}>
+                      {size.icon}
+                    </div>
+                    <div className="font-medium text-xs mb-0.5" style={{ color: 'var(--text)' }}>
+                      {size.name}
+                    </div>
+                    <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                      {size.width}×{size.height}
                     </div>
                   </button>
                 ))}
               </div>
-              
+
+              {/* Custom Size */}
               <button
                 onClick={() => setSelectedSize('自定义')}
-                className={`w-full py-4 px-6 rounded-xl border-2 font-semibold transition-all duration-300 ${
-                  selectedSize === '自定义' ? 'scale-105' : 'hover:scale-102'
-                }`}
+                className="w-full py-2.5 rounded-xl transition-all duration-200 text-xs font-medium"
                 style={{
-                  backgroundColor: 'var(--background-tertiary)',
-                  borderColor: selectedSize === '自定义' ? 'var(--accent-color)' : 'var(--border-color)',
-                  borderWidth: selectedSize === '自定义' ? '2px' : '1px',
-                  color: selectedSize === '自定义' ? 'var(--accent-color)' : 'var(--text-primary)',
-                  boxShadow: selectedSize === '自定义' ? '0 0 20px rgba(8, 145, 178, 0.2)' : 'none'
+                  backgroundColor: selectedSize === '自定义' ? 'var(--bg-hover)' : 'var(--bg-secondary)',
+                  border: `1px solid ${selectedSize === '自定义' ? 'var(--accent)' : 'var(--border)'}`,
+                  color: selectedSize === '自定义' ? 'var(--accent)' : 'var(--text-secondary)',
                 }}
               >
-                <span className="flex items-center justify-center gap-2">
-                  🎨 自定义尺寸
-                </span>
+                自定义尺寸
               </button>
 
-              {/* 自定义尺寸输入 */}
+              {/* Custom Size Input */}
               {selectedSize === '自定义' && (
                 <div 
-                  className="mt-6 p-6 rounded-2xl border-2 animate-fadeIn"
-                  style={{ 
-                    backgroundColor: 'var(--background-tertiary)',
-                    borderColor: 'var(--border-color)'
-                  }}
+                  className="mt-3 p-4 rounded-xl animate-fadeIn"
+                  style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
                 >
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+                      <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text)' }}>
                         宽度 (px)
                       </label>
                       <InputNumber
                         className="w-full"
-                        size="large"
                         placeholder="宽度"
                         value={customWidth ? parseInt(customWidth) : undefined}
                         onChange={(value) => setCustomWidth(value?.toString() || '')}
                         min={1}
-                        style={{ 
-                          backgroundColor: 'var(--background-secondary)',
-                          borderColor: 'var(--border-color)'
-                        }}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+                      <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text)' }}>
                         高度 (px)
                       </label>
                       <InputNumber
                         className="w-full"
-                        size="large"
                         placeholder="高度"
                         value={customHeight ? parseInt(customHeight) : undefined}
                         onChange={(value) => setCustomHeight(value?.toString() || '')}
                         min={1}
-                        style={{ 
-                          backgroundColor: 'var(--background-secondary)',
-                          borderColor: 'var(--border-color)'
-                        }}
                       />
                     </div>
                   </div>
@@ -304,18 +250,12 @@ const ImageCropper = () => {
               )}
             </div>
 
-            {/* 图片预览 */}
-            {imageUrl && (
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
-                  图片预览
-                </h3>
+            {/* Image Preview */}
+            {imageUrl && !croppedImage && (
+              <div className="mt-6">
                 <div 
-                  className="rounded-2xl p-6 mb-6"
-                  style={{ 
-                    backgroundColor: 'var(--background-tertiary)',
-                    border: '1px solid var(--border-color)'
-                  }}
+                  className="rounded-xl p-3 mb-4"
+                  style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
                 >
                   <img
                     ref={imageRef}
@@ -325,28 +265,24 @@ const ImageCropper = () => {
                   />
                 </div>
 
-                {/* 裁剪按钮 */}
+                {/* Crop Button */}
                 <button
                   onClick={handleCrop}
                   disabled={cropping || (selectedSize === '自定义' && (!customWidth || !customHeight))}
-                  className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 ${
-                    selectedFile && !cropping ? 'hover:scale-105 hover:shadow-2xl cursor-pointer' : 'opacity-50 cursor-not-allowed'
-                  }`}
-                  style={{
-                    background: selectedFile && !cropping ? 'var(--primary-gradient)' : 'var(--background-tertiary)',
-                    boxShadow: selectedFile && !cropping ? '0 8px 30px rgba(8, 145, 178, 0.25)' : 'none'
-                  }}
+                  className="btn-gradient w-full py-3 text-sm"
                 >
                   <span className="flex items-center justify-center gap-2">
                     {cropping ? (
                       <>
-                        <span className="animate-spin">⚙️</span>
+                        <div className="loading-spinner" />
                         裁剪中...
                       </>
                     ) : (
                       <>
-                        ✂️ 开始裁剪
-                        <span>⚡</span>
+                        开始裁剪
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                       </>
                     )}
                   </span>
@@ -354,84 +290,61 @@ const ImageCropper = () => {
               </div>
             )}
 
-            {/* 裁剪结果 */}
+            {/* Cropped Result */}
             {croppedImage && (
-              <div 
-                className="mt-8 p-8 rounded-2xl border-2 animate-fadeIn"
-                style={{ 
-                  backgroundColor: 'var(--background-tertiary)',
-                  borderColor: 'var(--accent-color)'
-                }}
-              >
-                <div className="text-center mb-6">
-                  <div className="text-5xl mb-4">✨</div>
-                  <p className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                    裁剪完成！
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                    您的图片已准备就绪
-                  </p>
+              <div className="success-box mt-6 animate-scaleIn">
+                <div className="success-icon mb-3">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-                <div className="mb-6 flex justify-center">
-                  <img src={croppedImage} alt="裁剪结果" className="max-w-full h-auto rounded-lg shadow-lg" />
+                <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>
+                  裁剪完成
+                </h3>
+                <p className="text-xs mb-4" style={{ color: 'var(--text-muted)' }}>
+                  您的图片已准备就绪
+                </p>
+                <div className="mb-4 flex justify-center">
+                  <img
+                    src={croppedImage}
+                    alt="裁剪结果"
+                    className="max-w-full h-auto rounded-lg"
+                    style={{ maxHeight: '200px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                  />
                 </div>
                 <button
                   onClick={handleDownload}
-                  className="w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                  style={{
-                    background: 'var(--primary-gradient)',
-                    boxShadow: '0 8px 30px rgba(8, 145, 178, 0.25)'
-                  }}
+                  className="btn-gradient w-full py-3 text-sm"
                 >
                   <span className="flex items-center justify-center gap-2">
-                    <Icon icon={downloadIcon} />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
                     下载图片
                   </span>
                 </button>
               </div>
             )}
 
-            {/* 隐藏的canvas用于裁剪 */}
-            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+            {/* Hidden Canvas */}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
           </div>
         </div>
 
-        {/* 功能说明 */}
-        <div 
-          className={`mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          style={{ animationDelay: '0.4s' }}
-        >
-          {[
-            { icon: '📐', title: '精确尺寸', desc: '支持多种标准证件照尺寸' },
-            { icon: '🎯', title: '智能裁剪', desc: '自动居中，保持最佳比例' },
-            { icon: '📥', title: '即时下载', desc: '一键下载，无需等待' }
-          ].map((feature, index) => (
-            <div 
-              key={index}
-              className="p-6 rounded-2xl border transition-all duration-300 hover:scale-105"
-              style={{ 
-                backgroundColor: 'var(--background-card)',
-                borderColor: 'var(--border-color)'
-              }}
-            >
-              <div className="text-4xl mb-3">{feature.icon}</div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-                {feature.title}
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                {feature.desc}
-              </p>
-            </div>
-          ))}
+        {/* Tips */}
+        <div className={`mt-6 text-center ${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            所有裁剪在本地完成，保护您的隐私安全
+          </p>
         </div>
       </div>
 
-      {/* 底部 */}
-      <div className="relative z-10 py-8 px-8 text-center">
-        <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+      {/* Footer */}
+      <footer className="relative z-10 py-8 text-center">
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           © 2026 LiteKit. 保留所有权利。
         </p>
-      </div>
+      </footer>
     </div>
   )
 }
