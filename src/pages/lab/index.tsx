@@ -15,19 +15,12 @@ const Lab = () => {
     { name: 'Tailwind', desc: '原子化CSS', color: '#38B2AC' },
   ]
 
-  type StatusType = 'completed' | 'in-progress' | 'planned'
-
-  const roadmap = [
-    { phase: 'Phase 1', title: '基础工具集', status: 'completed' as StatusType, items: ['文件转换', '图片处理'] },
-    { phase: 'Phase 2', title: '效率工具', status: 'in-progress' as StatusType, items: ['批量处理', '格式优化'] },
-    { phase: 'Phase 3', title: '协作功能', status: 'planned' as StatusType, items: ['云同步', '团队共享'] },
+  const features = [
+    { icon: '🔒', title: '本地处理', desc: '所有数据仅在浏览器本地处理，不上传至任何服务器' },
+    { icon: '⚡', title: '即开即用', desc: '无需注册、无需登录，打开即可使用' },
+    { icon: '🎯', title: '轻量高效', desc: '基于现代 Web 技术构建，快速响应' },
+    { icon: '💎', title: '简洁美观', desc: '精心设计的界面，操作直观便捷' },
   ]
-
-  const statusColors: Record<StatusType, string> = {
-    completed: '#10b981',
-    'in-progress': '#f59e0b',
-    planned: '#6b7280',
-  }
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
@@ -117,48 +110,22 @@ const Lab = () => {
           </div>
         </div>
 
-        {/* Roadmap */}
+        {/* Core Features */}
         <div className={`mb-12 ${isLoaded ? 'animate-slideUp delay-300' : 'opacity-0'}`}>
           <h2 className="text-lg font-semibold mb-5" style={{ color: 'var(--text)' }}>
-            发展路线
+            核心特点
           </h2>
-          <div className="space-y-4">
-            {roadmap.map((phase, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {features.map((feature, index) => (
               <div
-                key={phase.phase}
-                className="card p-5"
+                key={feature.title}
+                className="card p-4 flex items-start gap-4"
                 style={{ animationDelay: `${index * 50 + 300}ms` }}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="px-2 py-1 rounded-lg text-xs font-medium"
-                      style={{ backgroundColor: `${statusColors[phase.status]}20`, color: statusColors[phase.status] }}
-                    >
-                      {phase.phase}
-                    </span>
-                    <h3 className="font-medium" style={{ color: 'var(--text)' }}>{phase.title}</h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: statusColors[phase.status] }}
-                    />
-                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                      {phase.status === 'completed' ? '已完成' : phase.status === 'in-progress' ? '进行中' : '规划中'}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {phase.items.map(item => (
-                    <span
-                      key={item}
-                      className="px-3 py-1 rounded-full text-xs"
-                      style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}
-                    >
-                      {item}
-                    </span>
-                  ))}
+                <span className="text-2xl">{feature.icon}</span>
+                <div>
+                  <h3 className="font-medium mb-1" style={{ color: 'var(--text)' }}>{feature.title}</h3>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{feature.desc}</p>
                 </div>
               </div>
             ))}
