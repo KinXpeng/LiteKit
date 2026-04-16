@@ -66,16 +66,14 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
         <div className="flex items-center justify-between">
           {/* Logo with Title - Click to go home */}
           <Link to="/" className="flex items-center gap-3 group">
-            {/* Creative Logo - Flowing Modules */}
+            {/* Creative Logo - Abstract Mountain/Arrow */}
             <svg className="w-9 h-9" viewBox="0 0 40 40" fill="none">
-              {/* Three flowing modules representing tools/components */}
-              <circle cx="12" cy="14" r="5" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]" opacity="0.9" />
-              <rect x="22" y="9" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]" opacity="0.7" />
-              <path d="M8 26h10l2 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]" opacity="0.5" />
-              {/* Connection dots */}
-              <circle cx="20" cy="14" r="1.5" fill="currentColor" className="text-[var(--accent)]" />
-              <circle cx="8" cy="20" r="1.5" fill="currentColor" className="text-[var(--text-secondary)]" opacity="0.4" />
-              <circle cx="30" cy="25" r="1.5" fill="currentColor" className="text-[var(--text-secondary)]" opacity="0.4" />
+              {/* Main mountain peak */}
+              <path d="M20 6L34 34H6L20 6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]" />
+              {/* Inner peak accent */}
+              <path d="M20 14L28 30H12L20 14Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]" opacity="0.5" />
+              {/* Sun/rising dot */}
+              <circle cx="30" cy="10" r="3" fill="currentColor" className="text-[var(--accent)]" />
             </svg>
             {/* Title */}
             <span 
