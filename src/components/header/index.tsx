@@ -55,12 +55,16 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-      style={isScrolled ? {
-        backgroundColor: 'var(--bg-secondary)',
-        backdropFilter: 'blur(16px) saturate(150%)',
+      style={{
+        backgroundImage: 'radial-gradient(transparent 1px, var(--bg-secondary) 1px)',
+        backgroundSize: '4px 4px',
+        backdropFilter: 'saturate(50%) blur(4px)',
+        WebkitBackdropFilter: 'saturate(50%) blur(4px)',
         borderBottom: '1px solid var(--border)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.05)',
-      } : {}}
+        ...(isScrolled ? {
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.05)',
+        } : {}),
+      }}
     >
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
@@ -76,7 +80,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               <circle cx="30" cy="10" r="3" fill="currentColor" className="text-[var(--accent)]" />
             </svg>
             {/* Title */}
-            <span 
+            <span
               className="text-xl font-bold"
               style={{
                 background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
