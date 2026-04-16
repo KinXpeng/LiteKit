@@ -52,9 +52,6 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
     setIsDarkMode(!isDarkMode)
   }
 
-  // Get current page info
-  const currentPage = appConfig.navigation.links.find(link => location.pathname === link.path)
-
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
@@ -78,10 +75,10 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
                   <stop offset="100%" stopColor="#d946ef" />
                 </linearGradient>
                 <filter id="glow">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
                   <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
               </defs>
@@ -102,96 +99,13 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
             </span>
           </Link>
 
-          {/* Desktop Navigation - More Dropdown */}
-          <div className="hidden md:flex items-center gap-3" ref={dropdownRef}>
-            {/* Current Page Indicator */}
-            {currentPage && location.pathname !== '/' && (
-              <div className="px-4 py-2 rounded-xl" style={{ backgroundColor: 'var(--bg-hover)' }}>
-                <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-                  {currentPage.label}
-                </span>
-              </div>
-            )}
-
-            {/* More Menu Button */}
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
-                style={{ 
-                  color: 'var(--text-secondary)'
-                }}
-                title="更多功能"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="5" r="1.5" />
-                  <circle cx="12" cy="12" r="1.5" />
-                  <circle cx="12" cy="19" r="1.5" />
-                </svg>
-              </button>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div 
-                  className="absolute right-0 mt-2 w-48 py-2 rounded-xl animate-scaleIn"
-                  style={{ 
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
-                    boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  {appConfig.navigation.links.filter(link => link.path !== '/').map(link => {
-                    const isActive = location.pathname === link.path
-                    return (
-                      <Link
-                        key={link.path}
-                        to={link.path}
-                        onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors"
-                        style={{ 
-                          color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-                          backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent'
-                        }}
-                      >
-                        {isActive && (
-                          <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
-                        )}
-                        <span style={{ marginLeft: isActive ? '0' : '20px' }}>{link.label}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Theme Toggle */}
-            <button
-              onClick={handleThemeToggle}
-              className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
-              style={{ 
-                backgroundColor: 'var(--bg-hover)',
-                color: 'var(--text-secondary)'
-              }}
-            >
-              {isDarkMode ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </button>
-          </div>
-
           {/* Mobile Right Actions */}
           <div className="flex items-center gap-3 md:hidden">
             {/* Theme Toggle */}
             <button
               onClick={handleThemeToggle}
               className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
-              style={{ 
+              style={{
                 backgroundColor: 'var(--bg-hover)',
                 color: 'var(--text-secondary)'
               }}
@@ -211,7 +125,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ 
+              style={{
                 backgroundColor: 'var(--bg-hover)',
                 color: 'var(--text-secondary)'
               }}
@@ -225,11 +139,104 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               </svg>
             </button>
           </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-2" ref={dropdownRef}>
+
+            {/* Lab Button - Beaker Icon */}
+            <Link
+              to="/lab"
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{
+                backgroundColor: location.pathname === '/lab' ? 'var(--bg-hover)' : 'var(--bg-hover)',
+                color: location.pathname === '/lab' ? 'var(--accent)' : 'var(--text-secondary)'
+              }}
+              title="实验室"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3h8M9 3v4.5L4 19h16l-5-11.5V3" />
+                <path d="M7 15h10" />
+              </svg>
+            </Link>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={handleThemeToggle}
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{
+                backgroundColor: 'var(--bg-hover)',
+                color: 'var(--text-secondary)'
+              }}
+              title={isDarkMode ? '切换亮色' : '切换暗色'}
+            >
+              {isDarkMode ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
+            {/* More Menu Button */}
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                style={{
+                  backgroundColor: isDropdownOpen ? 'var(--bg-hover)' : 'transparent',
+                  color: 'var(--text-secondary)'
+                }}
+                title="更多功能"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="5" r="1.5" fill="currentColor" />
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                  <circle cx="12" cy="19" r="1.5" fill="currentColor" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-48 py-2 rounded-xl animate-scaleIn"
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border)',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  {appConfig.navigation.links.filter(link => link.path !== '/' && link.path !== '/lab').map(link => {
+                    const isActive = location.pathname === link.path
+                    return (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors"
+                        style={{
+                          color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                          backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent'
+                        }}
+                      >
+                        {isActive && (
+                          <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
+                        )}
+                        <span style={{ marginLeft: isActive ? '0' : '20px' }}>{link.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div 
+          <div
             className="md:hidden mt-4 p-4 rounded-2xl animate-slideDown"
             style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}
           >
