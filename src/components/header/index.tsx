@@ -66,35 +66,27 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
         <div className="flex items-center justify-between">
           {/* Logo with Title - Click to go home */}
           <Link to="/" className="flex items-center gap-3 group">
-            {/* Enhanced Mini Logo Icon */}
-            <svg className="w-9 h-9" viewBox="0 0 48 48" fill="none">
-              <defs>
-                <linearGradient id="headerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#3b82f6" />
-                  <stop offset="50%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#d946ef" />
-                </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {/* Outer glow */}
-              <circle cx="24" cy="24" r="22" fill="url(#headerLogoGradient)" opacity="0.15" filter="url(#glow)" />
-              {/* Main circle */}
-              <circle cx="24" cy="24" r="18" fill="url(#headerLogoGradient)" />
-              {/* Inner highlight */}
-              <circle cx="20" cy="18" r="6" fill="white" opacity="0.15" />
-              {/* Abstract "L" */}
-              <path d="M16 32 L16 20 L23 20" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              {/* Abstract "K" */}
-              <path d="M25 20 L25 32 M25 26 L31 20 M25 26 L31 32" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            {/* Creative Logo - Flowing Modules */}
+            <svg className="w-9 h-9" viewBox="0 0 40 40" fill="none">
+              {/* Three flowing modules representing tools/components */}
+              <circle cx="12" cy="14" r="5" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]" opacity="0.9" />
+              <rect x="22" y="9" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]" opacity="0.7" />
+              <path d="M8 26h10l2 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--accent)]" opacity="0.5" />
+              {/* Connection dots */}
+              <circle cx="20" cy="14" r="1.5" fill="currentColor" className="text-[var(--accent)]" />
+              <circle cx="8" cy="20" r="1.5" fill="currentColor" className="text-[var(--text-secondary)]" opacity="0.4" />
+              <circle cx="30" cy="25" r="1.5" fill="currentColor" className="text-[var(--text-secondary)]" opacity="0.4" />
             </svg>
             {/* Title */}
-            <span className="text-xl font-bold gradient-text">
+            <span 
+              className="text-xl font-bold"
+              style={{
+                background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
               {appConfig.logo.text}
             </span>
           </Link>
