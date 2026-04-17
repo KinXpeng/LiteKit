@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Upload } from 'antd'
-import { pdfToWord, wordToPdf, isApiConfigured } from '../../services/fileConverter'
+import { pdfToWord, wordToPdf } from '../../utils/fileConverter'
+import { isApiConfigured } from '../../api/file'
 
 const FileConverter = () => {
   const [isLoaded, setIsLoaded] = useState(false)
