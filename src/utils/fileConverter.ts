@@ -10,7 +10,17 @@ interface ConversionTask {
     progress?: number
     files?: Array<{ url: string; filename: string }>
     error?: string
+    form?: {
+      url: string
+      parameters: Record<string, string>
+    }
   }
+}
+
+interface ConversionJob {
+  id: string
+  status: string
+  tasks: ConversionTask[]
 }
 
 interface ConversionResult {
@@ -29,12 +39,12 @@ async function waitForJob(
   let attempts = 0
 
   while (attempts < maxAttempts) {
-    const job = await cloudConvertApi.getJob(jobId)
+    const job: ConversionJob = await cloudConvertApi.getJob(jobId)
     const status = job.status
 
     if (job.tasks?.length) {
-      const importTask = job.tasks.find((t: ConversionTask) => t.operation === 'import/upload')
-      const convertTask = job.tasks.find((t: ConversionTask) => t.operation === 'convert')
+      const importTask = job.tasks.find((t) => t.operation === 'import/upload')
+      const convertTask = job.tasks.find((t) => t.operation === 'convert')
 
       let progressText = ''
       let percent = 0
@@ -53,7 +63,10 @@ async function waitForJob(
         progressText = '转换即将开始...'
       }
 
-      console.log(`Job ${status}: ${progressText}`, { importTask: importTask?.status, convertTask: convertTask?.status })
+      console.log(`Job ${status}: ${progressText}`, {
+        importTask: importTask?.status,
+        convertTask: convertTask?.status,
+      })
 
       if (onProgress) {
         onProgress(percent)
@@ -66,7 +79,7 @@ async function waitForJob(
     }
 
     if (status === 'error' || status === 'cancelled') {
-      const errorTask = job.tasks?.find((t: ConversionTask) => t.status === 'error')
+      const errorTask = job.tasks?.find((t) => t.status === 'error')
       const errorMsg = errorTask?.result?.error || status
       throw new Error(`转换失败: ${errorMsg}`)
     }
@@ -82,9 +95,8 @@ async function waitForJob(
  * 获取转换结果
  */
 async function getResult(jobId: string): Promise<ConversionResult> {
-  const job = await cloudConvertApi.getJob(jobId)
-  const tasks = job.tasks as ConversionTask[]
-  const exportTask = tasks.find((t) => t.operation === 'export/url')
+  const job: ConversionJob = await cloudConvertApi.getJob(jobId)
+  const exportTask = job.tasks.find((t) => t.operation === 'export/url')
 
   if (!exportTask?.result?.files?.[0]) {
     throw new Error('获取转换结果失败')
@@ -115,7 +127,7 @@ async function uploadViaS3(
   outputFormat: string,
   file: File
 ): Promise<string> {
-  const job = await cloudConvertApi.createJob({
+  const job: ConversionJob = await cloudConvertApi.createJob({
     'import-file': {
       operation: 'import/upload',
     },
@@ -136,7 +148,7 @@ async function uploadViaS3(
 
   console.log('Job 创建成功:', job.id)
 
-  const uploadTask = job.tasks.find((t: any) => t.name === 'import-file')
+  const uploadTask = job.tasks.find((t) => t.name === 'import-file')
   const formInfo = uploadTask?.result?.form
 
   if (!formInfo) {
@@ -166,7 +178,7 @@ async function uploadViaBase64(
         const base64 = (reader.result as string).split(',')[1]
         console.log('使用 base64 方式创建 job...')
 
-        const job = await cloudConvertApi.createJob({
+        const job: ConversionJob = await cloudConvertApi.createJob({
           'import-file': {
             operation: 'import/base64',
             file: base64,
@@ -190,7 +202,7 @@ async function uploadViaBase64(
         console.log('Base64 job 创建成功:', job.id)
         resolve(job.id)
       } catch (error: any) {
-        console.error('Base64 上传失败:', error.response?.data || error.message)
+        console.error('Base64 上传失败:', error.message)
         reject(error)
       }
     }
@@ -225,16 +237,11 @@ export async function pdfToWord(
 ): Promise<File> {
   console.log('文件大小:', (file.size / 1024 / 1024).toFixed(2), 'MB')
 
-  try {
-    const jobId = await createAndUploadJob('pdf', 'docx', file)
-    await waitForJob(jobId, onProgress)
-    const result = await getResult(jobId)
-    const outputFilename = result.filename || file.name.replace('.pdf', '.docx')
-    return await downloadConvertedFile(result.url, outputFilename)
-  } catch (error: any) {
-    console.error('转换错误:', error.response?.data || error.message)
-    throw error
-  }
+  const jobId = await createAndUploadJob('pdf', 'docx', file)
+  await waitForJob(jobId, onProgress)
+  const result = await getResult(jobId)
+  const outputFilename = result.filename || file.name.replace('.pdf', '.docx')
+  return await downloadConvertedFile(result.url, outputFilename)
 }
 
 /**
@@ -246,14 +253,9 @@ export async function wordToPdf(
 ): Promise<File> {
   console.log('文件大小:', (file.size / 1024 / 1024).toFixed(2), 'MB')
 
-  try {
-    const jobId = await createAndUploadJob('docx', 'pdf', file)
-    await waitForJob(jobId, onProgress)
-    const result = await getResult(jobId)
-    const outputFilename = result.filename || file.name.replace(/\.(docx|doc)$/, '.pdf')
-    return await downloadConvertedFile(result.url, outputFilename)
-  } catch (error: any) {
-    console.error('转换错误:', error.response?.data || error.message)
-    throw error
-  }
+  const jobId = await createAndUploadJob('docx', 'pdf', file)
+  await waitForJob(jobId, onProgress)
+  const result = await getResult(jobId)
+  const outputFilename = result.filename || file.name.replace(/\.(docx|doc)$/, '.pdf')
+  return await downloadConvertedFile(result.url, outputFilename)
 }
