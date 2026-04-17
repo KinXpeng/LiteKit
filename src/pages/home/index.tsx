@@ -78,21 +78,73 @@ const Home = () => {
         {/* Header Section */}
         <div className={`text-center ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
 
-          {/* Main Title */}
-          <div className="mb-6">
-            <h1
-              className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-relaxed"
-              style={{ color: 'var(--text)' }}
-            >
-              <span style={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}>
-                简单
+          {/* Main Title with Diagonal Split Animation */}
+          <div className="mb-6 group">
+            <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight flex items-center justify-center">
+              {/* Left side - "简单" */}
+              <span className="relative">
+                <span
+                  className="inline-block transition-all duration-500 ease-out group-hover:-translate-x-6 group-hover:-translate-y-4"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  简单
+                </span>
+                {/* Left shadow trail */}
+                <span
+                  className="absolute inset-0 inline-block opacity-0 group-hover:opacity-40 transition-opacity duration-500 blur-md -translate-x-6 -translate-y-4"
+                  style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  简单
+                </span>
               </span>
-              <span style={{ color: 'var(--text)' }}>，才是对的</span>
+
+              {/* Diagonal slash divider */}
+              <div className="relative mx-px">
+                <div
+                  className="w-6 md:w-8 h-px opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:w-14 group-hover:md:w-18"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent)',
+                    transform: 'rotate(-60deg)',
+                    boxShadow: '0 0 6px #a855f7, 0 0 12px #6366f1',
+                  }}
+                />
+              </div>
+
+              {/* Right side - "才是对的" */}
+              <span className="relative">
+                <span
+                  className="inline-block transition-all duration-500 ease-out group-hover:translate-x-6 group-hover:translate-y-4"
+                  style={{ color: 'var(--text)' }}
+                >
+                  才是对的
+                </span>
+                {/* Right shadow trail */}
+                <span
+                  className="absolute inset-0 inline-block opacity-0 group-hover:opacity-25 transition-opacity duration-500 blur-md translate-x-6 translate-y-4"
+                  style={{ color: 'var(--text)' }}
+                >
+                  才是对的
+                </span>
+              </span>
             </h1>
+
+            {/* Dynamic underline */}
+            <div
+              className="absolute -bottom-2 left-1/2 h-px transition-all duration-500"
+              style={{
+                width: '40%',
+                background: 'linear-gradient(90deg, transparent, #3b82f6 30%, #8b5cf6 70%, transparent)',
+                transform: 'translateX(-50%)',
+              }}
+            />
           </div>
 
           {/* Subtitle with animated transition */}
