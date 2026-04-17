@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Upload } from 'antd'
+import { Upload, Input } from 'antd'
 import { pdfToWord, wordToPdf } from '../../utils/fileConverter'
 import { isApiConfigured } from '../../api/file'
+import { appConfig } from '../../configs'
+
+const { licenseKey: configuredLicenseKey } = appConfig.fileConverter
 
 const FileConverter = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -11,6 +14,11 @@ const FileConverter = () => {
   const [converting, setConverting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [licenseKey, setLicenseKey] = useState('')
+  const [licenseError, setLicenseError] = useState(false)
+
+  // 检查是否需要授权码
+  const requiresLicense = !!configuredLicenseKey
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100)
@@ -19,7 +27,22 @@ const FileConverter = () => {
 
   const handleConvert = async () => {
     if (!selectedFile) return
-    
+
+    // 授权码验证
+    if (requiresLicense) {
+      if (!licenseKey || licenseKey.trim() === '') {
+        setLicenseError(true)
+        setError('请输入授权码')
+        return
+      }
+      if (licenseKey !== configuredLicenseKey) {
+        setLicenseError(true)
+        setError('授权码错误，请检查后重试')
+        return
+      }
+      setLicenseError(false)
+    }
+
     if (!isApiConfigured()) {
       setError('请先配置 CloudConvert API Key\n\n1. 访问 https://cloudconvert.com 注册账号\n2. 获取免费 API Key\n3. 在项目根目录创建 .env 文件\n4. 添加: VITE_CLOUDCONVERT_API_KEY=你的APIKey')
       return
@@ -73,6 +96,9 @@ const FileConverter = () => {
   const handleReset = () => {
     setSelectedFile(null)
     setConvertedFile(null)
+    setLicenseKey('')
+    setLicenseError(false)
+    setError(null)
   }
 
   return (
@@ -156,12 +182,45 @@ const FileConverter = () => {
               </div>
             </Upload>
 
+            {/* License Key Input */}
+            {requiresLicense && selectedFile && !convertedFile && (
+              <div className="mt-4 animate-scaleIn">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-4 h-4" style={{ color: 'var(--text-muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>授权码</span>
+                </div>
+                <Input.Password
+                  size="large"
+                  placeholder="请输入授权码"
+                  value={licenseKey}
+                  onChange={(e) => {
+                    setLicenseKey(e.target.value)
+                    setLicenseError(false)
+                    setError(null)
+                  }}
+                  status={licenseError ? 'error' : undefined}
+                  className="license-input"
+                  style={{
+                    borderRadius: '12px',
+                    height: '48px',
+                    backgroundColor: 'var(--bg-card)',
+                    borderColor: licenseError ? '#ef4444' : 'var(--border)',
+                  }}
+                />
+                {licenseError && error?.includes('授权码') && (
+                  <p className="text-xs mt-1.5" style={{ color: '#ef4444' }}>{error}</p>
+                )}
+              </div>
+            )}
+
             {/* Convert Button */}
             {selectedFile && !convertedFile && (
               <>
                 <button
                   onClick={handleConvert}
-                  disabled={converting}
+                  disabled={converting || (requiresLicense && !licenseKey)}
                   className="btn-gradient w-full py-3.5 mt-5 text-sm"
                 >
                   <span className="flex items-center justify-center gap-2">
