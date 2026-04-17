@@ -13,6 +13,7 @@
 		"@iconify/icons-material-symbols": "^1.2.58",
 		"@iconify/react": "^6.0.2",
 		"antd": "^6.3.5",
+		"axios": "^1.15.0",
 		"esbuild": "^0.28.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

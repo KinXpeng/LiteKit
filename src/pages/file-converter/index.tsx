@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Upload } from 'antd'
+import { pdfToWord, wordToPdf, isApiConfigured } from '../../services/fileConverter'
 
 const FileConverter = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -7,30 +8,52 @@ const FileConverter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [convertedFile, setConvertedFile] = useState<File | null>(null)
   const [converting, setConverting] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100)
     return () => clearTimeout(timer)
   }, [])
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
     if (!selectedFile) return
+    
+    if (!isApiConfigured()) {
+      setError('请先配置 CloudConvert API Key\n\n1. 访问 https://cloudconvert.com 注册账号\n2. 获取免费 API Key\n3. 在项目根目录创建 .env 文件\n4. 添加: VITE_CLOUDCONVERT_API_KEY=你的APIKey')
+      return
+    }
 
     setConverting(true)
+    setError(null)
+    setProgress(0)
 
-    setTimeout(() => {
-      const mockConvertedFile = new File(
-        ['Mock converted content'],
-        'converted-file.' + (conversionType === 'pdf-to-word' ? 'docx' : 'pdf'),
-        {
-          type: conversionType === 'pdf-to-word'
-            ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            : 'application/pdf',
-        }
-      )
-      setConvertedFile(mockConvertedFile)
+    try {
+      let result: File
+
+      if (conversionType === 'pdf-to-word') {
+        result = await pdfToWord(selectedFile, (p) => setProgress(Math.round(p)))
+      } else {
+        result = await wordToPdf(selectedFile, (p) => setProgress(Math.round(p)))
+      }
+
+      setConvertedFile(result)
+    } catch (err: any) {
+      const errorData = err.response?.data
+      let message = '转换失败，请查看浏览器控制台获取详情'
+      
+      if (errorData?.message) {
+        message = errorData.message
+      } else if (err instanceof Error) {
+        message = err.message
+      }
+      
+      setError(message)
+      console.error('转换错误详情:', errorData || err)
+    } finally {
       setConverting(false)
-    }, 2000)
+      setProgress(0)
+    }
   }
 
   const handleDownload = () => {
@@ -134,27 +157,35 @@ const FileConverter = () => {
 
             {/* Convert Button */}
             {selectedFile && !convertedFile && (
-              <button
-                onClick={handleConvert}
-                disabled={converting}
-                className="btn-gradient w-full py-3.5 mt-5 text-sm"
-              >
-                <span className="flex items-center justify-center gap-2">
-                  {converting ? (
-                    <>
-                      <div className="loading-spinner" />
-                      转换中...
-                    </>
-                  ) : (
-                    <>
-                      开始转换
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </>
-                  )}
-                </span>
-              </button>
+              <>
+                <button
+                  onClick={handleConvert}
+                  disabled={converting}
+                  className="btn-gradient w-full py-3.5 mt-5 text-sm"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    {converting ? (
+                      <>
+                        <div className="loading-spinner" />
+                        转换中 {progress}%
+                      </>
+                    ) : (
+                      <>
+                        开始转换
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </>
+                    )}
+                  </span>
+                </button>
+                {/* Error Message */}
+                {error && (
+                  <div className="mt-3 p-3 rounded-lg text-xs" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#ef4444', whiteSpace: 'pre-line' }}>
+                    {error}
+                  </div>
+                )}
+              </>
             )}
 
             {/* Success Result */}
@@ -190,7 +221,7 @@ const FileConverter = () => {
         {/* Tips */}
         <div className={`mt-6 text-center ${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            所有转换在本地完成，保护您的隐私安全
+            文件将通过 CloudConvert 云端处理，转换完成后自动删除
           </p>
         </div>
       </div>
