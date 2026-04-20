@@ -39,7 +39,7 @@ export const appConfig = {
   // 如果为空，则不显示授权码输入框
   // 如果有值，用户在转换前需要输入正确的授权码
   fileConverter: {
-    licenseKey: '1016',
+    licenseKey: '',
   },
 }
 
