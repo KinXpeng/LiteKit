@@ -90,6 +90,47 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 全局页面容器 - 最大宽度 90vw */
+.page-container {
+  width: 100%;
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 响应式最大宽度调整 */
+@media (min-width: 1920px) {
+  .page-container {
+    max-width: 1728px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .page-container {
+    max-width: 2304px;
+  }
+}
+
+/* 首页特定容器 */
+.home-container {
+  width: 100%;
+  max-width: 90vw;
+  margin: 0 auto;
+}
+
+/* 卡片容器 - 响应式网格 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+@media (min-width: 1920px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
 /* ========================================
    动画系统
    ======================================== */

@@ -66,7 +66,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
         } : {}),
       }}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4">
+      <div className="max-w-[90%] mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo with Title - Click to go home */}
           <Link to="/" className="flex items-center gap-3 group">

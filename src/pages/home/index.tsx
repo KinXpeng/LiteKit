@@ -25,8 +25,8 @@ const Home = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
-      {/* High-Tech Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* High-Tech Background - Fixed fullscreen */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Main gradient orb - top left */}
         <div
           className="absolute w-[600px] h-[600px] rounded-full blur-[120px] opacity-10"
@@ -74,7 +74,7 @@ const Home = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-10">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-10">
         {/* Header Section */}
         <div className={`text-center ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
 

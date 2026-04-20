@@ -6,27 +6,27 @@ type TabType = 'crop' | 'background' | 'compose' | 'compress'
 const ImageProcessor = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [activeTab, setActiveTab] = useState<TabType>('crop')
-  
+
   // Common state
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [processedImage, setProcessedImage] = useState<string | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  
+
   // Crop state
   const [selectedSize, setSelectedSize] = useState<string>('1寸')
   const [customWidth, setCustomWidth] = useState<string>('')
   const [customHeight, setCustomHeight] = useState<string>('')
   const [cropping, setCropping] = useState(false)
-  
+
   // Background change state
   const [bgColor, setBgColor] = useState<string>('#FFFFFF')
   const [processingBg, setProcessingBg] = useState(false)
-  
+
   // Compose state
   const [composeCount, setComposeCount] = useState<number>(6)
-  
+
   // Compress state
   const [quality, setQuality] = useState<number>(80)
   const [compressing, setCompressing] = useState(false)
@@ -126,15 +126,15 @@ const ImageProcessor = () => {
       // Simple background replacement (lighten the source color tolerance)
       const imageData = tempCtx.getImageData(0, 0, img.width, img.height)
       const data = imageData.data
-      
+
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i]
         const g = data[i + 1]
         const b = data[i + 2]
-        
+
         // Detect white/light background (simple threshold)
         const isWhiteBg = r > 200 && g > 200 && b > 200 && Math.abs(r - g) < 30 && Math.abs(g - b) < 30
-        
+
         if (isWhiteBg) {
           // Make transparent
           data[i + 3] = 0
@@ -154,7 +154,7 @@ const ImageProcessor = () => {
   // Compose ID photos
   const handleCompose = () => {
     if (!imageRef.current || !canvasRef.current) return
-    
+
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
     const img = imageRef.current
@@ -163,15 +163,15 @@ const ImageProcessor = () => {
     // Standard 1寸 size: 295x413
     const photoW = 295
     const photoH = 413
-    
+
     // 6 photos per A4 paper (2x3)
     const cols = 3
     const rows = 2
     const margin = 30
-    
+
     canvas.width = cols * photoW + (cols + 1) * margin
     canvas.height = rows * photoH + (rows + 1) * margin
-    
+
     // White background
     ctx.fillStyle = '#FFFFFF'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -181,7 +181,7 @@ const ImageProcessor = () => {
       const row = Math.floor(i / cols)
       const x = margin + col * (photoW + margin)
       const y = margin + row * (photoH + margin)
-      
+
       ctx.drawImage(img, x, y, photoW, photoH)
     }
 
@@ -204,7 +204,7 @@ const ImageProcessor = () => {
       const maxDim = 2000
       let newWidth = img.width
       let newHeight = img.height
-      
+
       if (newWidth > maxDim || newHeight > maxDim) {
         const ratio = Math.min(maxDim / newWidth, maxDim / newHeight)
         newWidth = Math.round(newWidth * ratio)
@@ -268,9 +268,9 @@ const ImageProcessor = () => {
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Background */}
       <div className="bg-pattern" />
-      
+
       {/* Content */}
-      <div className="relative z-10 max-w-2xl mx-auto px-6 pt-32 pb-20">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-20">
         {/* Page Title */}
         <div className={`text-center mb-8 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
           <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>
@@ -291,9 +291,8 @@ const ImageProcessor = () => {
                   setActiveTab(tab.key as TabType)
                   setProcessedImage(null)
                 }}
-                className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-medium transition-all duration-200 ${
-                  activeTab === tab.key ? '' : 'hover:bg-[var(--bg-hover)]'
-                }`}
+                className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-medium transition-all duration-200 ${activeTab === tab.key ? '' : 'hover:bg-[var(--bg-hover)]'
+                  }`}
                 style={activeTab === tab.key ? {
                   backgroundColor: 'var(--accent)',
                   color: '#fff',
@@ -324,7 +323,7 @@ const ImageProcessor = () => {
             >
               <div className={`upload-zone ${selectedFile ? 'active' : ''}`}>
                 <div className="mb-3">
-                  <div 
+                  <div
                     className="w-12 h-12 mx-auto rounded-xl flex items-center justify-center"
                     style={{ background: 'var(--gradient-primary)' }}
                   >
@@ -353,9 +352,8 @@ const ImageProcessor = () => {
                         <button
                           key={size.name}
                           onClick={() => setSelectedSize(size.name)}
-                          className={`py-3 px-2 rounded-xl text-center transition-all ${
-                            selectedSize === size.name ? '' : 'hover:bg-[var(--bg-hover)]'
-                          }`}
+                          className={`py-3 px-2 rounded-xl text-center transition-all ${selectedSize === size.name ? '' : 'hover:bg-[var(--bg-hover)]'
+                            }`}
                           style={selectedSize === size.name ? {
                             backgroundColor: 'var(--accent)',
                             color: '#fff',
@@ -370,7 +368,7 @@ const ImageProcessor = () => {
                         </button>
                       ))}
                     </div>
-                    
+
                     {selectedSize === 'custom' && (
                       <div className="grid grid-cols-2 gap-3 mb-4 p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                         <div>
@@ -416,9 +414,8 @@ const ImageProcessor = () => {
                           key={bg.name}
                           onClick={() => handleChangeBackground(bg.color)}
                           disabled={processingBg}
-                          className={`py-3 px-2 rounded-xl text-center transition-all ${
-                            bgColor === bg.color ? 'ring-2 ring-offset-2 ring-[var(--accent)]' : ''
-                          }`}
+                          className={`py-3 px-2 rounded-xl text-center transition-all ${bgColor === bg.color ? 'ring-2 ring-offset-2 ring-[var(--accent)]' : ''
+                            }`}
                           style={{
                             backgroundColor: bg.color === 'gradient-blue' ? '#4a90d9' : bg.color,
                             border: '1px solid var(--border)',
@@ -451,7 +448,7 @@ const ImageProcessor = () => {
                         marks={{ 1: '1', 2: '2', 4: '4', 6: '6' }}
                       />
                     </div>
-                    
+
                     <button
                       onClick={handleCompose}
                       className="btn-gradient w-full py-3 text-sm"
@@ -479,7 +476,7 @@ const ImageProcessor = () => {
                         marks={{ 30: '低', 60: '中', 80: '高', 100: '原图' }}
                       />
                     </div>
-                    
+
                     <button
                       onClick={handleCompress}
                       disabled={compressing}

@@ -13,13 +13,15 @@ const App = () => {
         <Header />
 
         {/* 主内容 */}
-        <div className="pt-20">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/lab" element={<Lab />} />
-            <Route path="/file-converter" element={<FileConverter />} />
-            <Route path="/image-processor" element={<ImageProcessor />} />
-          </Routes>
+        <div className="pt-19">
+          <div className="page-container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/lab" element={<Lab />} />
+              <Route path="/file-converter" element={<FileConverter />} />
+              <Route path="/image-processor" element={<ImageProcessor />} />
+            </Routes>
+          </div>
         </div>
       </div>
     </Router>
