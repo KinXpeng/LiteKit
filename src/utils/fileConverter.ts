@@ -37,6 +37,8 @@ async function waitForJob(
 ): Promise<void> {
   const maxAttempts = 180
   let attempts = 0
+  let lastKnownPercent = 0
+  let isIncreasingPhase = true
 
   while (attempts < maxAttempts) {
     const job: ConversionJob = await cloudConvertApi.getJob(jobId)
@@ -50,17 +52,17 @@ async function waitForJob(
       let percent = 0
 
       if (convertTask?.status === 'processing') {
-        percent = convertTask.result?.progress || 0
+        const apiProgress = convertTask.result?.progress || 0
+        percent = apiProgress
+        lastKnownPercent = apiProgress
+        isIncreasingPhase = false
         progressText = `转换中: ${percent}%`
       } else if (convertTask?.status === 'queued') {
-        percent = 0
         progressText = '等待转换...'
       } else if (importTask?.status === 'processing') {
-        percent = 0
-        progressText = '处理中...'
+        progressText = '上传中...'
       } else if (importTask?.status === 'finished' && convertTask?.status !== 'finished') {
-        percent = 0
-        progressText = '转换即将开始...'
+        progressText = '准备转换...'
       }
 
       console.log(`Job ${status}: ${progressText}`, {
@@ -69,12 +71,32 @@ async function waitForJob(
       })
 
       if (onProgress) {
-        onProgress(percent)
+        if (percent > 0) {
+          // API 返回了真实进度
+          onProgress(percent)
+        } else {
+          // 模拟进度动画
+          if (isIncreasingPhase) {
+            // 初始阶段: 0 -> 30 缓慢增长
+            const animatedPercent = Math.min(30, Math.floor((attempts * 2.5)))
+            onProgress(animatedPercent)
+          } else if (lastKnownPercent < 95) {
+            // 已有进度但未完成: 继续缓慢增长到 95
+            const animatedPercent = Math.min(95, lastKnownPercent + Math.floor((attempts % 5) * 2))
+            onProgress(animatedPercent)
+          } else {
+            // 已接近完成: 95 -> 99
+            onProgress(99)
+          }
+        }
       }
     }
 
     if (status === 'finished') {
       console.log('转换完成!')
+      if (onProgress) {
+        onProgress(100)
+      }
       return
     }
 

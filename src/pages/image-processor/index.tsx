@@ -270,7 +270,7 @@ const ImageProcessor = () => {
       <div className="bg-pattern" />
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-20">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-16 sm:pb-20">
         {/* Page Title */}
         <div className={`text-center mb-8 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
           <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>

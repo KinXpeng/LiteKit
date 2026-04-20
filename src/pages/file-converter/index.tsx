@@ -107,7 +107,7 @@ const FileConverter = () => {
       <div className="bg-pattern" />
       
       {/* Content */}
-      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-20">
+      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-16 sm:pb-20">
         {/* Quick Guide */}
         <div className={`mb-6 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
           <div className="flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}>

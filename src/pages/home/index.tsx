@@ -74,7 +74,7 @@ const Home = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-10">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-10">
         {/* Header Section */}
         <div className={`text-center ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
 
