@@ -11,8 +11,11 @@ const ImageProcessor = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [processedImage, setProcessedImage] = useState<string | null>(null)
+  const [processingSource, setProcessingSource] = useState<string | null>(null) // 当前处理的源图片
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
+  // 处理后的图片引用 - 使用普通变量通过回调更新
+  const processedImgRef = useRef<{ img: HTMLImageElement | null }>({ img: null })
 
   // Crop state
   const [selectedSize, setSelectedSize] = useState<string>('1寸')
@@ -58,6 +61,8 @@ const ImageProcessor = () => {
     const url = URL.createObjectURL(file)
     setImageUrl(url)
     setProcessedImage(null)
+    setProcessingSource(url) // 初始源为原图
+    processedImgRef.current.img = null // 清空处理后的图片引用，确保新图片换底
   }
 
   // Crop functionality
@@ -89,31 +94,117 @@ const ImageProcessor = () => {
 
   // Change background color
   const handleChangeBackground = (targetColor: string) => {
-    if (!imageRef.current || !canvasRef.current) return
+    if (!processingSource && !imageRef.current) return
     setBgColor(targetColor)
     setProcessingBg(true)
 
     setTimeout(() => {
       const canvas = canvasRef.current
       const ctx = canvas?.getContext('2d')
-      const img = imageRef.current
-      if (!ctx || !img || !canvas) return
+      if (!ctx || !canvas) return
 
-      // Create temp canvas for processing
+      // 使用当前处理的源图片（可能是处理后的图片）
+      const img = processedImgRef.current.img || imageRef.current
+      if (!img) return
+
+      const width = img.naturalWidth || img.width
+      const height = img.naturalHeight || img.height
+
+      // 创建临时画布处理
       const tempCanvas = document.createElement('canvas')
-      tempCanvas.width = img.width
-      tempCanvas.height = img.height
+      tempCanvas.width = width
+      tempCanvas.height = height
       const tempCtx = tempCanvas.getContext('2d')
       if (!tempCtx) return
 
-      // Draw original image
+      // 绘制源图片
       tempCtx.drawImage(img, 0, 0)
 
-      canvas.width = img.width
-      canvas.height = img.height
+      // 获取图片数据
+      const imageData = tempCtx.getImageData(0, 0, width, height)
+      const data = imageData.data
 
+      // 分析背景颜色（取图片边缘的颜色作为参考）
+      const edgeColors: number[][] = []
+
+      // 采样边缘像素
+      const sampleSize = Math.min(20, width, height)
+      for (let i = 0; i < sampleSize; i++) {
+        // 顶部边缘
+        edgeColors.push([data[i * 4], data[i * 4 + 1], data[i * 4 + 2]])
+        // 底部边缘
+        const bottomIdx = (height - 1) * width * 4 + i * 4
+        edgeColors.push([data[bottomIdx], data[bottomIdx + 1], data[bottomIdx + 2]])
+        // 左边边缘
+        const leftIdx = i * width * 4
+        edgeColors.push([data[leftIdx], data[leftIdx + 1], data[leftIdx + 2]])
+        // 右边边缘
+        const rightIdx = i * width * 4 + (width - 1) * 4
+        edgeColors.push([data[rightIdx], data[rightIdx + 1], data[rightIdx + 2]])
+      }
+
+      // 计算平均背景颜色
+      const avgBg = [0, 0, 0]
+      edgeColors.forEach(c => {
+        avgBg[0] += c[0]
+        avgBg[1] += c[1]
+        avgBg[2] += c[2]
+      })
+      avgBg[0] = Math.round(avgBg[0] / edgeColors.length)
+      avgBg[1] = Math.round(avgBg[1] / edgeColors.length)
+      avgBg[2] = Math.round(avgBg[2] / edgeColors.length)
+
+      // 颜色容差范围
+      const tolerance = 50
+
+      // 创建带透明度的图片（人物部分保留，背景变透明）
+      const alphaCanvas = document.createElement('canvas')
+      alphaCanvas.width = width
+      alphaCanvas.height = height
+      const alphaCtx = alphaCanvas.getContext('2d')
+      if (!alphaCtx) return
+
+      // 创建透明图片
+      const alphaImageData = alphaCtx.createImageData(width, height)
+      const alphaData = alphaImageData.data
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const idx = (y * width + x) * 4
+
+          const r = data[idx]
+          const g = data[idx + 1]
+          const b = data[idx + 2]
+
+          // 计算与背景颜色的差异
+          const diff = Math.abs(r - avgBg[0]) + Math.abs(g - avgBg[1]) + Math.abs(b - avgBg[2])
+
+          // 根据差异计算透明度
+          let alpha = 255
+          if (diff < tolerance) {
+            // 在背景范围内 - 完全透明
+            alpha = 0
+          } else if (diff < tolerance * 2) {
+            // 过渡区域 - 渐变透明
+            alpha = Math.round(((diff - tolerance) / tolerance) * 255)
+          }
+          // diff >= tolerance * 2: alpha = 255 (完全不透明)
+
+          alphaData[idx] = r
+          alphaData[idx + 1] = g
+          alphaData[idx + 2] = b
+          alphaData[idx + 3] = alpha
+        }
+      }
+
+      alphaCtx.putImageData(alphaImageData, 0, 0)
+
+      // 创建输出画布并绘制
+      canvas.width = width
+      canvas.height = height
+
+      // 绘制背景
       if (targetColor === 'gradient-blue') {
-        // Gradient background
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
         gradient.addColorStop(0, '#4a90d9')
         gradient.addColorStop(1, '#357abd')
@@ -123,31 +214,20 @@ const ImageProcessor = () => {
       }
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Simple background replacement (lighten the source color tolerance)
-      const imageData = tempCtx.getImageData(0, 0, img.width, img.height)
-      const data = imageData.data
-
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i]
-        const g = data[i + 1]
-        const b = data[i + 2]
-
-        // Detect white/light background (simple threshold)
-        const isWhiteBg = r > 200 && g > 200 && b > 200 && Math.abs(r - g) < 30 && Math.abs(g - b) < 30
-
-        if (isWhiteBg) {
-          // Make transparent
-          data[i + 3] = 0
-        }
-      }
-
-      // Draw processed image on top of background
-      ctx.drawImage(tempCanvas, 0, 0)
-      ctx.putImageData(imageData, 0, 0)
+      // 将带透明度的图片绘制到背景上
+      ctx.drawImage(alphaCanvas, 0, 0)
 
       const resultUrl = canvas.toDataURL('image/png')
       setProcessedImage(resultUrl)
-      setProcessingBg(false)
+
+      // 设置处理后的图片引用，用于下次换底
+      const newImg = new Image()
+      newImg.onload = () => {
+        processedImgRef.current.img = newImg
+        setProcessingSource(resultUrl)
+        setProcessingBg(false)
+      }
+      newImg.src = resultUrl
     }, 100)
   }
 
@@ -290,6 +370,10 @@ const ImageProcessor = () => {
                 onClick={() => {
                   setActiveTab(tab.key as TabType)
                   setProcessedImage(null)
+                  // 切换回背景换底时重置处理源
+                  if (tab.key === 'background') {
+                    setProcessingSource(imageUrl)
+                  }
                 }}
                 className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-medium transition-all duration-200 ${activeTab === tab.key ? '' : 'hover:bg-[var(--bg-hover)]'
                   }`}
@@ -489,12 +573,12 @@ const ImageProcessor = () => {
               </div>
             )}
 
-            {/* Image Preview */}
+            {/* Image Preview - 显示当前处理的源图片 */}
             {imageUrl && !processedImage && (
               <div className="mt-6">
                 <img
                   ref={imageRef}
-                  src={imageUrl}
+                  src={processingSource || imageUrl}
                   alt="预览"
                   className="max-w-full h-auto mx-auto rounded-lg"
                   style={{ maxHeight: '300px' }}
