@@ -80,7 +80,12 @@ const Home = () => {
 
           {/* Main Title with Diagonal Split Animation */}
           <div className="mb-6 group">
-            <h1 className="relative text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight flex items-center justify-center">
+            <h1
+              className="relative text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight flex items-center justify-center"
+              style={{
+                fontFamily: 'AlimamaShuHeiTi-Bold'
+              }}
+            >
               {/* Left side - "简单" */}
               <span className="relative">
                 <span

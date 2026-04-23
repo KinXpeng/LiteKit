@@ -83,6 +83,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
             <span
               className="text-xl font-bold"
               style={{
+                fontFamily: 'AlimamaShuHeiTi-Bold',
                 background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
