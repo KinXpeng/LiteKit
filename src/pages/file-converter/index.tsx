@@ -100,9 +100,6 @@ const FileConverter = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
-      {/* Background */}
-      <div className="bg-pattern" />
-
       <div className="relative z-10 w-full max-w-xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
         {/* Quick Guide */}
         <div className={`mb-5 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>

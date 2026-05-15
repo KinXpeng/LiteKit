@@ -66,9 +66,6 @@ const Lab = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
-      {/* Background */}
-      <div className="bg-pattern" />
-
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
         {/* Hero */}
         <div className={`text-center mb-14 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>

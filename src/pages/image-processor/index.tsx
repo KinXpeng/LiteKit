@@ -309,8 +309,6 @@ const ImageProcessor = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
-      <div className="bg-pattern" />
-
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
         {/* Page Title */}
         <div className={`text-center mb-7 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>

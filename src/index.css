@@ -17,9 +17,9 @@
   --dark-bg-hover: rgba(30, 30, 48, 0.6);
   --dark-bg-glass: rgba(14, 14, 22, 0.85);
   --dark-bg-elevated: #1a1a2a;
-  --dark-text: #e8e8f0;
-  --dark-text-secondary: #9d9db5;
-  --dark-text-muted: #5e5e7a;
+  --dark-text: #f4f4fa;
+  --dark-text-secondary: #bfbfd4;
+  --dark-text-muted: #8282a0;
   --dark-border: rgba(255, 255, 255, 0.06);
   --dark-border-hover: rgba(255, 255, 255, 0.10);
   --dark-accent: #6899f0;
@@ -40,9 +40,9 @@
   --light-bg-hover: rgba(245, 245, 250, 0.8);
   --light-bg-glass: rgba(255, 255, 255, 0.8);
   --light-bg-elevated: #ffffff;
-  --light-text: #17172a;
-  --light-text-secondary: #5c5c7a;
-  --light-text-muted: #9494ad;
+  --light-text: #12122a;
+  --light-text-secondary: #4a4a6a;
+  --light-text-muted: #7e7e9e;
   --light-border: rgba(0, 0, 0, 0.07);
   --light-border-hover: rgba(0, 0, 0, 0.12);
   --light-accent: #4a7de0;
@@ -398,13 +398,60 @@ body {
   animation: spin .7s linear infinite;
 }
 
-/* ── Background Elements ── */
+/* ── Global Animated Background ──
+   Two large luminous orbs slowly drifting across the viewport.
+   Using fixed positioning so they're always visible regardless of scroll. */
+
 .bg-pattern {
   position: fixed; inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 50%, var(--accent-glow) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(167,139,250,.06) 0%, transparent 50%);
   pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+
+/* Orb 1 — Blue, drifts in a lazy figure-8 */
+.bg-pattern::before {
+  content: '';
+  position: fixed;
+  width: 75vw; height: 75vw;
+  border-radius: 50%;
+  filter: blur(120px);
+  will-change: top, left;
+  animation: orbDrift1 20s ease-in-out infinite;
+}
+
+/* Orb 2 — Violet, drifts opposite */
+.bg-pattern::after {
+  content: '';
+  position: fixed;
+  width: 65vw; height: 65vw;
+  border-radius: 50%;
+  filter: blur(110px);
+  will-change: top, left;
+  animation: orbDrift2 24s ease-in-out infinite;
+}
+
+/* ── Dark theme — richer, visible orbs ── */
+.bg-pattern::before { background: rgba(104, 153, 240, 0.22); }
+.bg-pattern::after  { background: rgba(167, 139, 250, 0.18); }
+
+/* ── Light theme — softer but still visible ── */
+[data-theme="light"] .bg-pattern::before { background: rgba(74, 125, 224, 0.12); }
+[data-theme="light"] .bg-pattern::after  { background: rgba(139, 111, 224, 0.10); }
+
+@keyframes orbDrift1 {
+  0%   { top: -25%; left: -20%; }
+  25%  { top: 10%;  left: 50%; }
+  50%  { top: 50%;  left: 75%; }
+  75%  { top: 25%;  left: 30%; }
+  100% { top: -25%; left: -20%; }
+}
+
+@keyframes orbDrift2 {
+  0%   { top: 60%;  left: 85%; }
+  25%  { top: 15%;  left: 60%; }
+  50%  { top: -20%; left: 15%; }
+  75%  { top: 40%;  left: 50%; }
+  100% { top: 60%;  left: 85%; }
 }
 
 /* ── Divider ── */

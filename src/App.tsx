@@ -18,7 +18,9 @@ const App = () => {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--bg)' }}>
+      <div className="min-h-screen">
+        {/* Global animated background */}
+        <div className="bg-pattern" />
         <Header />
         <div className="pt-16">
           <div className="page-container">

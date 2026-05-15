@@ -31,7 +31,7 @@ const Home = () => {
   ]
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: 'var(--bg)' }}>
+    <div className="min-h-screen relative">
       {/* ── Background Atmosphere ── */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         {/* Large soft glow — top */}
