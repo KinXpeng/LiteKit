@@ -7,7 +7,7 @@ export const appConfig = {
   // 主题配置
   theme: {
     // 默认主题: 'light' | 'dark'
-    defaultTheme: 'light' as 'light' | 'dark',
+    defaultTheme: 'dark' as 'light' | 'dark',
   },
 
   // 应用名称
