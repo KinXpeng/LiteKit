@@ -42,41 +42,13 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   const handleThemeToggle = () => setIsDarkMode(!isDarkMode)
 
   const primaryLinks = [
-    {
-      path: '/', label: '首页',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
-    },
-    {
-      path: '/lab', label: '实验室',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-        </svg>
-      ),
-    },
+    { path: '/', label: '首页', en: 'Home' },
+    { path: '/lab', label: '实验室', en: 'Lab' },
   ]
 
   const moreLinks = [
-    {
-      path: '/file-converter', label: '文件转换',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-        </svg>
-      ),
-    },
-    {
-      path: '/image-processor', label: '图片处理',
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      ),
-    },
+    { path: '/file-converter', label: '文件转换', en: 'Convert' },
+    { path: '/image-processor', label: '图片处理', en: 'Image' },
   ]
 
   const allLinks = [...primaryLinks, ...moreLinks]
@@ -85,111 +57,138 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
       style={{
-        backdropFilter: isScrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(150%)',
-        WebkitBackdropFilter: isScrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(150%)',
+        backdropFilter: isScrolled ? 'blur(24px) saturate(160%)' : 'blur(10px) saturate(140%)',
+        WebkitBackdropFilter: isScrolled ? 'blur(24px) saturate(160%)' : 'blur(10px) saturate(140%)',
         backgroundColor: isScrolled ? 'var(--bg-glass)' : 'transparent',
         borderBottom: isScrolled ? '1px solid var(--border)' : '1px solid transparent',
       }}
     >
-      {/* Top gradient accent line */}
+      {/* Top neon scan-line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-500"
         style={{
-          background: 'linear-gradient(90deg, transparent, var(--accent-light), var(--accent), var(--accent-light), transparent)',
-          opacity: isScrolled ? 0 : 0.4,
+          background: 'linear-gradient(90deg, transparent 0%, var(--cyan) 25%, var(--accent) 50%, var(--violet) 75%, transparent 100%)',
+          opacity: isScrolled ? 0.6 : 0.85,
+          boxShadow: '0 0 12px var(--accent-glow)',
         }}
       />
 
-      <div className="max-w-[90%] mx-auto px-6 py-3.5">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-3.5">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* ── Logo : animated geometric mark + wordmark ── */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="relative">
-              <svg className="w-9 h-9 transition-transform duration-500 group-hover:scale-110" viewBox="0 0 40 40" fill="none">
+              <svg className="w-9 h-9 transition-transform duration-700 group-hover:rotate-180" viewBox="0 0 40 40" fill="none">
                 <defs>
-                  <linearGradient id="logoGradH2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#5b8def" />
-                    <stop offset="100%" stopColor="#a78bfa" />
+                  <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="var(--cyan)" />
+                    <stop offset="50%" stopColor="var(--accent)" />
+                    <stop offset="100%" stopColor="var(--violet)" />
                   </linearGradient>
+                  <filter id="logoGlow">
+                    <feGaussianBlur stdDeviation="2" />
+                  </filter>
                 </defs>
-                <path d="M20 6L34 34H6L20 6Z" stroke="url(#logoGradH2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M20 14L28 30H12L20 14Z" stroke="url(#logoGradH2)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-                <circle cx="30" cy="10" r="3" fill="url(#logoGradH2)" className="animate-pulse-slow" />
+                {/* Outer rotating ring */}
+                <circle cx="20" cy="20" r="17" stroke="url(#logoGrad)" strokeWidth="1" strokeDasharray="3 5" fill="none" className="animate-spin-slow" style={{ transformOrigin: 'center' }} />
+                {/* Triangle */}
+                <path d="M20 8L31 28H9L20 8Z" stroke="url(#logoGrad)" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                {/* Center dot */}
+                <circle cx="20" cy="22" r="2.5" fill="url(#logoGrad)" />
+                <circle cx="20" cy="22" r="4.5" fill="url(#logoGrad)" opacity="0.3" filter="url(#logoGlow)" />
               </svg>
-              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ boxShadow: '0 0 24px var(--accent-glow)' }} />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ boxShadow: '0 0 32px var(--accent-glow)', borderRadius: '50%' }} />
             </div>
-            <span
-              className="text-lg font-bold hidden sm:block"
-              style={{
-                fontFamily: 'AlimamaShuHeiTi-Bold',
-                background: 'linear-gradient(135deg, #7baef8 0%, #a78bfa 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              {appConfig.logo.text}
-            </span>
+            <div className="hidden sm:flex flex-col leading-none">
+              <span
+                className="text-base font-display font-bold tracking-tight"
+                style={{ color: 'var(--text)' }}
+              >
+                Litekit
+              </span>
+              <span className="font-mono text-[9px] tracking-[0.22em] uppercase mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                轻 / 序
+              </span>
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* ── Desktop nav ── */}
           <div className="hidden md:flex items-center gap-1">
-            {/* Primary links */}
             {primaryLinks.map(link => {
               const isActive = location.pathname === link.path
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-250 hover:bg-[var(--bg-hover)]"
-                  style={{ color: isActive ? 'var(--accent)' : 'var(--text-secondary)' }}
+                  className="relative flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm transition-all duration-300 group"
+                  style={{ color: isActive ? 'var(--text)' : 'var(--text-secondary)' }}
                 >
-                  {link.icon}
-                  <span>{link.label}</span>
                   {isActive && (
-                    <div
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
-                      style={{ backgroundColor: 'var(--accent)' }}
+                    <span
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border)',
+                        boxShadow: 'inset 0 0 12px var(--accent-glow)',
+                      }}
+                    />
+                  )}
+                  <span className="relative font-medium">{link.label}</span>
+                  {isActive && (
+                    <span
+                      className="relative w-1.5 h-1.5 rounded-full"
+                      style={{
+                        backgroundColor: 'var(--cyan)',
+                        boxShadow: '0 0 8px var(--cyan)',
+                      }}
                     />
                   )}
                 </Link>
               )
             })}
 
-            {/* Divider */}
-            <div className="w-px h-5 mx-2" style={{ backgroundColor: 'var(--border)' }} />
+            <div className="w-px h-4 mx-3" style={{ backgroundColor: 'var(--border)' }} />
 
-            {/* Theme Toggle */}
+            {/* Theme toggle */}
             <button
               onClick={handleThemeToggle}
-              className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-250 hover:scale-110 hover:bg-[var(--bg-hover)]"
+              className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 group"
               style={{ color: 'var(--text-secondary)' }}
               title={isDarkMode ? '切换亮色主题' : '切换暗色主题'}
             >
+              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }} />
               {isDarkMode ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg className="relative w-4 h-4 transition-transform duration-500 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg className="relative w-4 h-4 transition-transform duration-500 group-hover:-rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
               )}
             </button>
 
-            {/* More Menu Dropdown */}
+            {/* More dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-250 hover:scale-110"
-                style={{
-                  backgroundColor: isDropdownOpen ? 'var(--bg-hover)' : 'var(--bg-hover)',
-                  color: 'var(--text-secondary)',
-                }}
+                className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+                style={{ color: isDropdownOpen ? 'var(--text)' : 'var(--text-secondary)' }}
                 title="更多功能"
               >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <div
+                  className="absolute inset-0 rounded-full transition-opacity duration-300"
+                  style={{
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border)',
+                    opacity: isDropdownOpen ? 1 : 0,
+                  }}
+                />
+                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }} />
+                <svg className={`relative w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-90' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                   <circle cx="12" cy="5" r="1.5" fill="currentColor" />
                   <circle cx="12" cy="12" r="1.5" fill="currentColor" />
                   <circle cx="12" cy="19" r="1.5" fill="currentColor" />
@@ -198,15 +197,20 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
 
               {isDropdownOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-44 py-2 rounded-xl animate-scaleIn origin-top-right"
+                  className="absolute right-0 mt-3 w-56 py-1.5 rounded-xl animate-scaleIn origin-top-right overflow-hidden"
                   style={{
                     backgroundColor: 'var(--bg-glass)',
-                    backdropFilter: 'blur(24px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                    backdropFilter: 'blur(24px) saturate(160%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(160%)',
                     border: '1px solid var(--border)',
-                    boxShadow: 'var(--shadow-lg)',
+                    boxShadow: 'var(--shadow-lg), 0 0 24px var(--accent-glow)',
                   }}
                 >
+                  {/* Top gradient line */}
+                  <div className="absolute top-0 left-3 right-3 h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--cyan), var(--violet), transparent)' }} />
+                  <div className="px-4 pt-3 pb-1.5 font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-muted)' }}>
+                    More · Tools
+                  </div>
                   {moreLinks.map(link => {
                     const isActive = location.pathname === link.path
                     return (
@@ -214,16 +218,19 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
                         key={link.path}
                         to={link.path}
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150"
-                        style={{
-                          color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-                          backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent',
-                        }}
+                        className="flex items-center justify-between px-4 py-2.5 text-sm transition-all duration-200 hover:bg-[var(--bg-hover)] group/item"
+                        style={{ color: isActive ? 'var(--text)' : 'var(--text-secondary)' }}
                       >
-                        {link.icon}
-                        <span>{link.label}</span>
-                        {isActive && (
-                          <div className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
+                        <div className="flex items-center gap-3">
+                          <span className="font-medium">{link.label}</span>
+                          <span className="font-mono text-[10px] opacity-50">{link.en}</span>
+                        </div>
+                        {isActive ? (
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--cyan)', boxShadow: '0 0 6px var(--cyan)' }} />
+                        ) : (
+                          <svg className="w-3.5 h-3.5 opacity-30 group-hover/item:opacity-100 group-hover/item:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                          </svg>
                         )}
                       </Link>
                     )
@@ -233,12 +240,12 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
             </div>
           </div>
 
-          {/* Mobile Actions */}
+          {/* ── Mobile actions ── */}
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={handleThemeToggle}
-              className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200"
-              style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--text-secondary)' }}
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
             >
               {isDarkMode ? (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,27 +260,28 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200"
-              style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--text-secondary)' }}
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 transition-transform duration-300" style={{ transform: isMobileMenuOpen ? 'rotate(90deg)' : 'none' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7h16M4 12h12M4 17h8" />
                 )}
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ── Mobile menu ── */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-3 p-3 rounded-2xl animate-slideDown"
+          <div className="md:hidden mt-3 p-2 rounded-xl animate-slideDown"
             style={{
               backgroundColor: 'var(--bg-glass)',
               backdropFilter: 'blur(24px)',
               border: '1px solid var(--border)',
+              boxShadow: 'var(--shadow-md)',
             }}
           >
             {allLinks.map(link => {
@@ -283,16 +291,18 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+                  className="flex items-center justify-between px-4 py-3 rounded-lg text-sm transition-all duration-200"
                   style={{
-                    color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                    color: isActive ? 'var(--text)' : 'var(--text-secondary)',
                     backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent',
                   }}
                 >
-                  {link.icon}
-                  <span>{link.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium">{link.label}</span>
+                    <span className="font-mono text-[10px] opacity-50">{link.en}</span>
+                  </div>
                   {isActive && (
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--cyan)', boxShadow: '0 0 8px var(--cyan)' }} />
                   )}
                 </Link>
               )

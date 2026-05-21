@@ -1,4 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, MouseEvent } from 'react'
+
+const Spotlight = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const onMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = ref.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    el.style.setProperty('--mx', `${e.clientX - r.left}px`)
+    el.style.setProperty('--my', `${e.clientY - r.top}px`)
+  }
+  return (
+    <div ref={ref} onMouseMove={onMove} className={`spotlight-card ${className}`}>
+      {children}
+    </div>
+  )
+}
 
 const Lab = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -9,204 +25,330 @@ const Lab = () => {
   }, [])
 
   const technologies = [
-    { name: 'React', desc: '前端框架', color: '#61DAFB' },
-    { name: 'TypeScript', desc: '类型安全', color: '#3178C6' },
-    { name: 'Vite', desc: '极速构建', color: '#BD34FE' },
-    { name: 'Tailwind', desc: '原子化CSS', color: '#38BDF8' },
+    { name: 'React',      desc: 'UI framework',  v: '18', glow: 'var(--cyan)' },
+    { name: 'TypeScript', desc: 'Type safety',   v: '5',  glow: 'var(--accent)' },
+    { name: 'Vite',       desc: 'Build engine',  v: '4',  glow: 'var(--violet)' },
+    { name: 'Tailwind',   desc: 'Atomic CSS',    v: '3',  glow: 'var(--pink)' },
   ]
 
   const features = [
-    {
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-      ),
-      title: '本地处理',
-      desc: '所有数据仅在浏览器本地处理，不上传至任何服务器',
-      accent: '#10b981',
-    },
-    {
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
-      title: '即开即用',
-      desc: '无需注册、无需登录，打开即可使用',
-      accent: '#3b82f6',
-    },
-    {
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-        </svg>
-      ),
-      title: '轻量高效',
-      desc: '基于现代 Web 技术构建，快速响应',
-      accent: '#8b5cf6',
-    },
-    {
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-        </svg>
-      ),
-      title: '简洁美观',
-      desc: '精心设计的界面，操作直观便捷',
-      accent: '#f59e0b',
-    },
+    { num: '01', title: '本地处理', en: 'On-device',     desc: '所有数据仅在浏览器本地处理，不上传至任何服务器。', glow: 'var(--mint)' },
+    { num: '02', title: '即开即用', en: 'Friction-free', desc: '无需注册、无需登录，打开即可使用全部功能。',           glow: 'var(--cyan)' },
+    { num: '03', title: '轻量高效', en: 'Lightweight',   desc: '基于现代 Web 技术构建，快速响应，触手可得。',           glow: 'var(--violet)' },
+    { num: '04', title: '简洁美观', en: 'Considered',    desc: '精心设计的界面，操作直观便捷，每一处都经得起细看。',  glow: 'var(--pink)' },
   ]
 
   const values = [
-    { color: '#10b981', title: '隐私优先', desc: '数据仅在本地处理' },
-    { color: '#3b82f6', title: '极速响应', desc: '无需等待即时使用' },
-    { color: '#8b5cf6', title: '开源精神', desc: '免费使用持续迭代' },
+    { title: '隐私优先', en: 'Privacy', desc: '数据仅在本地处理', glow: 'var(--mint)' },
+    { title: '极速响应', en: 'Speed',   desc: '无需等待即时使用', glow: 'var(--cyan)' },
+    { title: '开源精神', en: 'Open',    desc: '免费使用持续迭代', glow: 'var(--violet)' },
   ]
 
+  const ribbon = ['LiteKit', 'Open Source', '轻 / 序', 'Tools', 'Privacy First', 'Local Only', '简单才是对的', 'MMXXVI']
+
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: 'var(--bg)' }}>
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
-        {/* Hero */}
-        <div className={`text-center mb-14 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
-          {/* Animated Logo */}
-          <div className="mb-8 inline-block">
-            <div className="relative">
-              <svg className="w-20 h-20 md:w-24 md:h-24 mx-auto" viewBox="0 0 100 100" fill="none">
-                <defs>
-                  <linearGradient id="labGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#5b8def" />
-                    <stop offset="50%" stopColor="#a78bfa" />
-                    <stop offset="100%" stopColor="#d946ef" />
-                  </linearGradient>
-                </defs>
-                {/* Outer ring */}
-                <circle cx="50" cy="50" r="44" stroke="url(#labGrad)" strokeWidth="1.5" strokeDasharray="6 6" className="animate-spin" style={{ animationDuration: '25s' }} />
-                <circle cx="50" cy="50" r="34" stroke="url(#labGrad)" strokeWidth="1" opacity="0.4" />
-                <circle cx="50" cy="50" r="22" fill="url(#labGrad)" opacity="0.08" />
-                {/* Flask */}
-                <path d="M42 32 L42 47 L37 57 L37 70 L63 70 L63 57 L58 47 L58 32 Z" stroke="url(#labGrad)" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M40 32 L60 32" stroke="url(#labGrad)" strokeWidth="1.8" strokeLinecap="round" />
-                {/* Animated bubbles */}
-                <circle cx="46" cy="62" r="3" fill="url(#labGrad)" opacity="0.5" className="animate-float" style={{ animationDuration: '2.2s' }} />
-                <circle cx="54" cy="57" r="2" fill="url(#labGrad)" opacity="0.35" className="animate-float" style={{ animationDuration: '2.8s', animationDelay: '0.5s' }} />
-                <circle cx="49" cy="53" r="2.5" fill="url(#labGrad)" opacity="0.45" className="animate-float" style={{ animationDuration: '1.9s', animationDelay: '0.3s' }} />
-              </svg>
-              {/* Glow */}
-              <div className="absolute inset-0 rounded-full animate-breathe pointer-events-none"
-                style={{ boxShadow: '0 0 60px var(--accent-glow)' }} />
-            </div>
+    <div className="min-h-screen relative">
+      <div className="relative z-10 w-full max-w-[1180px] mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-16">
+
+        {/* ═══ HERO ═══ */}
+        <section className={`mb-20 ${isLoaded ? 'animate-slideUp' : 'opacity-0'}`}>
+          <div className="flex items-baseline justify-between mb-4">
+            <div className="section-marker">§ 02 · Laboratory</div>
+            <span className="chip">
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--mint)', boxShadow: '0 0 6px var(--mint)' }} />
+              Active
+            </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: 'AlimamaShuHeiTi-Bold' }}>
-            <span className="gradient-text">LiteKit 实验室</span>
-          </h1>
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            探索无限可能，打造高效工具
-          </p>
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mt-10">
+            {/* Title */}
+            <div className="md:col-span-7">
+              <h1 className="leading-[0.92] tracking-tight">
+                <span className="block text-6xl sm:text-7xl font-chinese-display font-bold" style={{ fontFamily: 'AlimamaShuHeiTi-Bold', color: 'var(--text)' }}>
+                  实验室。
+                </span>
+                <span className="block text-5xl sm:text-6xl font-chinese-display font-bold mt-1" style={{ fontFamily: 'AlimamaShuHeiTi-Bold' }}>
+                  <span className="gradient-text">Tools are born here.</span>
+                </span>
+              </h1>
 
-        {/* Vision Card */}
-        <div className={`mb-10 ${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
-          <div className="card p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(91, 141, 239, 0.12)' }}>
-                <svg className="w-4.5 h-4.5" style={{ color: 'var(--accent)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <p className="mt-8 text-lg leading-relaxed max-w-xl" style={{ color: 'var(--text-secondary)' }}>
+                我们相信工具应该简单、高效、触手可及。LiteKit 致力于打造轻盈而强大的在线工具集，
+                让每一次操作都变得轻松愉悦。<span style={{ color: 'var(--text)' }}>无需注册，无需付费，</span>
+                一切都在你的浏览器中安全完成。
+              </p>
+
+              {/* CTA chips */}
+              <div className="mt-8 flex flex-wrap items-center gap-2.5">
+                <span className="chip chip-accent">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }} />
+                  Vol. MMXXVI
+                </span>
+                <span className="chip">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--cyan)' }} />
+                  v1.0.0
+                </span>
+                <span className="chip">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--mint)' }} />
+                  100% client-side
+                </span>
+              </div>
+            </div>
+
+            {/* Animated emblem */}
+            <div className="md:col-span-5 flex justify-center md:justify-end">
+              <div className="relative w-56 h-56 sm:w-72 sm:h-72">
+                {/* Glow */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)',
+                    filter: 'blur(20px)',
+                  }}
+                />
+                <svg viewBox="0 0 240 240" className="relative w-full h-full">
+                  <defs>
+                    <linearGradient id="labGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="var(--cyan)" />
+                      <stop offset="50%" stopColor="var(--accent)" />
+                      <stop offset="100%" stopColor="var(--violet)" />
+                    </linearGradient>
+                    <filter id="labGlow">
+                      <feGaussianBlur stdDeviation="3" />
+                    </filter>
+                  </defs>
+                  {/* Outer slow ring */}
+                  <circle cx="120" cy="120" r="116" stroke="url(#labGrad)" strokeWidth="0.75" strokeDasharray="3 8" fill="none" className="animate-spin-slow" style={{ transformOrigin: 'center' }} />
+                  {/* Inner reverse ring */}
+                  <circle cx="120" cy="120" r="92" stroke="url(#labGrad)" strokeWidth="1" strokeDasharray="2 6" fill="none" className="animate-spin-rev" style={{ transformOrigin: 'center' }} />
+                  {/* Mid ring (static) */}
+                  <circle cx="120" cy="120" r="74" stroke="url(#labGrad)" strokeWidth="0.5" opacity="0.4" fill="none" />
+                  {/* Center hex */}
+                  <polygon
+                    points="120,52 178,90 178,158 120,196 62,158 62,90"
+                    stroke="url(#labGrad)"
+                    strokeWidth="1.5"
+                    fill="rgba(110,107,255,0.08)"
+                  />
+                  {/* Flask */}
+                  <path
+                    d="M104 88 L104 116 L92 140 L92 170 L148 170 L148 140 L136 116 L136 88 Z"
+                    stroke="url(#labGrad)"
+                    strokeWidth="2"
+                    fill="rgba(0,230,255,0.08)"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line x1="100" y1="88" x2="140" y2="88" stroke="url(#labGrad)" strokeWidth="2" strokeLinecap="round" />
+                  {/* Animated bubbles */}
+                  <circle cx="110" cy="152" r="4" fill="var(--cyan)" opacity="0.7" className="animate-float" />
+                  <circle cx="128" cy="146" r="3" fill="var(--violet)" opacity="0.6" className="animate-float" style={{ animationDelay: '0.4s' }} />
+                  <circle cx="120" cy="138" r="3.5" fill="var(--accent)" opacity="0.65" className="animate-float" style={{ animationDelay: '0.8s' }} />
+                  {/* Crosshair markers */}
+                  <circle cx="120" cy="20" r="3" fill="var(--cyan)" filter="url(#labGlow)" className="animate-pulse" />
+                  <circle cx="120" cy="220" r="3" fill="var(--violet)" filter="url(#labGlow)" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+                  <circle cx="20" cy="120" r="3" fill="var(--accent)" filter="url(#labGlow)" className="animate-pulse" style={{ animationDelay: '1s' }} />
+                  <circle cx="220" cy="120" r="3" fill="var(--pink)" filter="url(#labGlow)" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
                 </svg>
               </div>
-              <h2 className="text-base font-semibold" style={{ color: 'var(--text)' }}>愿景</h2>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              我们相信，工具应该简单、高效、触手可及。LiteKit 致力于打造轻盈而强大的在线工具集，让每一次操作都变得轻松愉悦。无需注册，无需付费，一切都在你的浏览器中安全完成。
-            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Tech Stack */}
-        <div className={`mb-10 ${isLoaded ? 'animate-slideUp delay-200' : 'opacity-0'}`}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--text)' }}>
-            <span className="inline-block w-1 h-4 rounded-full align-middle mr-2" style={{ backgroundColor: 'var(--accent)' }} />
-            技术栈
+        {/* ═══ RIBBON MARQUEE ═══ */}
+        <section className={`mb-20 ${isLoaded ? 'animate-slideUp delay-100' : 'opacity-0'}`}>
+          <div
+            className="border-y py-5"
+            style={{ borderColor: 'var(--border)' }}
+          >
+            <div className="marquee">
+              <div className="marquee-track animate-marquee-slow">
+                {[...ribbon, ...ribbon, ...ribbon].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 shrink-0">
+                    <span className="font-display text-2xl font-medium" style={{ color: i % 4 === 0 ? 'var(--cyan)' : i % 4 === 1 ? 'var(--accent)' : i % 4 === 2 ? 'var(--violet)' : 'var(--text)' }}>
+                      {item}
+                    </span>
+                    <span className="text-2xl opacity-30">★</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ TECH STACK ═══ */}
+        <section className={`mb-20 ${isLoaded ? 'animate-slideUp delay-200' : 'opacity-0'}`}>
+          <div className="flex items-baseline justify-between mb-6">
+            <div className="section-marker">· Stack</div>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-muted)' }}>{technologies.length} libraries</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-chinese-display font-bold leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'AlimamaShuHeiTi-Bold', color: 'var(--text)' }}>
+            Built with <span className="gradient-text">现代 Web 技术</span>
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             {technologies.map((tech, i) => (
-              <div
-                key={tech.name}
-                className="card p-4 text-center group cursor-default"
-                style={{ animationDelay: `${i * 60 + 200}ms` }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center text-sm font-bold transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: `${tech.color}18`, color: tech.color }}
-                >
-                  {tech.name[0]}
-                </div>
-                <p className="text-xs font-medium mb-0.5" style={{ color: 'var(--text)' }}>{tech.name}</p>
-                <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{tech.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+              <Spotlight key={tech.name} className="group">
+                <div className="p-6 transition-all duration-500" style={{ animationDelay: `${i * 100}ms` }}>
+                  <div className="flex items-baseline justify-between mb-4">
+                    <span
+                      className="font-display font-bold leading-none"
+                      style={{
+                        fontSize: '2.6rem',
+                        background: `linear-gradient(135deg, ${tech.glow}, var(--accent))`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        filter: `drop-shadow(0 0 16px ${tech.glow})`,
+                      }}
+                    >
+                      {tech.name[0]}
+                    </span>
+                    <span className="font-mono text-[10px] tracking-[0.22em] px-2 py-0.5 rounded-md" style={{ color: 'var(--text-muted)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+                      v{tech.v}
+                    </span>
+                  </div>
+                  <p className="text-base font-medium mb-1" style={{ color: 'var(--text)' }}>{tech.name}</p>
+                  <p className="font-mono text-[10px] tracking-[0.18em] uppercase" style={{ color: 'var(--text-muted)' }}>{tech.desc}</p>
 
-        {/* Features */}
-        <div className={`mb-10 ${isLoaded ? 'animate-slideUp delay-300' : 'opacity-0'}`}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--text)' }}>
-            <span className="inline-block w-1 h-4 rounded-full align-middle mr-2" style={{ backgroundColor: 'var(--accent)' }} />
-            核心特点
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {features.map((feature, i) => (
-              <div
-                key={feature.title}
-                className="card p-4 flex items-start gap-4 group"
-                style={{ animationDelay: `${i * 60 + 300}ms` }}
-              >
-                <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: `${feature.accent}15`, color: feature.accent }}
-                >
-                  {feature.icon}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-sm font-medium mb-1" style={{ color: 'var(--text)' }}>{feature.title}</h3>
-                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{feature.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Values */}
-        <div className={`${isLoaded ? 'animate-slideUp delay-400' : 'opacity-0'}`}>
-          <div className="card p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {values.map((v) => (
-                <div key={v.title} className="text-center group">
+                  {/* Bottom hover line */}
                   <div
-                    className="w-10 h-10 rounded-2xl mx-auto mb-3 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${v.color}15` }}
+                    className="mt-4 h-px transition-all duration-500"
+                    style={{ width: '0%', background: `linear-gradient(90deg, ${tech.glow}, transparent)` }}
+                  />
+                </div>
+              </Spotlight>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══ FEATURES ═══ */}
+        <section className={`mb-20 ${isLoaded ? 'animate-slideUp delay-300' : 'opacity-0'}`}>
+          <div className="flex items-baseline justify-between mb-6">
+            <div className="section-marker">· Core Features</div>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-muted)' }}>04 items</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-chinese-display font-bold leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'AlimamaShuHeiTi-Bold', color: 'var(--text)' }}>
+            为什么 <span className="gradient-text">选择 LiteKit</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+            {features.map((feature) => (
+              <Spotlight key={feature.title} className="group">
+                <div className="p-7 relative">
+                  {/* Top accent line */}
+                  <div
+                    className="absolute top-0 left-0 h-px transition-all duration-500"
+                    style={{
+                      width: '50%',
+                      background: `linear-gradient(90deg, ${feature.glow}, transparent)`,
+                      boxShadow: `0 0 12px ${feature.glow}`,
+                    }}
+                  />
+                  <div className="flex items-baseline justify-between mb-4">
+                    <span
+                      className="font-display font-bold leading-none"
+                      style={{
+                        fontSize: '2.4rem',
+                        background: `linear-gradient(135deg, ${feature.glow}, var(--accent))`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        filter: `drop-shadow(0 0 12px ${feature.glow})`,
+                      }}
+                    >
+                      {feature.num}
+                    </span>
+                    <span className="chip">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: feature.glow, boxShadow: `0 0 6px ${feature.glow}` }} />
+                      {feature.en}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-chinese-display font-bold mb-2" style={{ fontFamily: 'AlimamaShuHeiTi-Bold', color: 'var(--text)' }}>
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{feature.desc}</p>
+                </div>
+              </Spotlight>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══ VALUES ═══ */}
+        <section className={`${isLoaded ? 'animate-slideUp delay-400' : 'opacity-0'}`}>
+          <div className="flex items-baseline justify-between mb-6">
+            <div className="section-marker">· Values</div>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-muted)' }}>triad</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+            {values.map((v, idx) => (
+              <div
+                key={v.title}
+                className="relative card group p-7 transition-all duration-700 overflow-hidden"
+              >
+                {/* Hover gradient */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse at top right, ${v.glow}26, transparent 70%)` }}
+                />
+                {/* Top neon */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-px"
+                  style={{ background: `linear-gradient(90deg, transparent, ${v.glow}, transparent)`, boxShadow: `0 0 8px ${v.glow}`, opacity: 0.6 }}
+                />
+
+                <div className="relative">
+                  <div className="flex items-baseline justify-between mb-4">
+                    <span className="font-mono text-[10px] tracking-[0.22em]" style={{ color: 'var(--text-muted)' }}>
+                      0{idx + 1} ·
+                    </span>
+                    <span className="font-mono text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: v.glow }}>
+                      {v.en}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-chinese-display font-bold mb-2" style={{ fontFamily: 'AlimamaShuHeiTi-Bold', color: 'var(--text)' }}>
+                    {v.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{v.desc}</p>
+
+                  <div
+                    className="mt-5 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
+                    style={{
+                      background: `${v.glow}26`,
+                      color: v.glow,
+                      boxShadow: `0 0 12px ${v.glow}40`,
+                    }}
                   >
-                    <svg className="w-5 h-5" style={{ color: v.color }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d={v.title === '隐私优先' ? 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' : v.title === '极速响应' ? 'M13 10V3L4 14h7v7l9-11h-7z' : 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'} />
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                      {idx === 0 && <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />}
+                      {idx === 1 && <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />}
+                      {idx === 2 && <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />}
                     </svg>
                   </div>
-                  <h3 className="text-sm font-medium mb-1" style={{ color: 'var(--text)' }}>{v.title}</h3>
-                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{v.desc}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 text-center">
-        <div className="divider-gradient" style={{ width: '50%', margin: '0 auto 24px' }} />
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          © 2026 LiteKit. 保留所有权利。
-        </p>
+      <footer className="relative z-10 py-12">
+        <div className="max-w-[1180px] mx-auto px-6">
+          <div className="divider-gradient mb-6" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="dot-glow" />
+              <p className="font-mono text-[11px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-secondary)' }}>
+                made quietly · for what matters
+              </p>
+            </div>
+            <p className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: 'var(--text-muted)' }}>
+              © 2026 LiteKit. 保留所有权利。
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   )

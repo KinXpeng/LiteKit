@@ -19,10 +19,15 @@ const App = () => {
     <Router>
       <ScrollToTop />
       <div className="min-h-screen">
-        {/* Global animated background */}
+        {/* Global animated atmosphere */}
         <div className="bg-pattern" />
+        <div className="mesh-orb mesh-orb-1" />
+        <div className="mesh-orb mesh-orb-2" />
+        <div className="mesh-orb mesh-orb-3" />
+        <div className="scanline" />
+        <div className="grain" />
         <Header />
-        <div className="pt-16">
+        <div className="pt-16 relative" style={{ zIndex: 3 }}>
           <div className="page-container">
             <Routes>
               <Route path="/" element={<Home />} />
