@@ -1,45 +1,31 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
-import Header from './components/header'
-import Home from './pages/home/index'
-import Lab from './pages/lab/index'
-import FileConverter from './pages/file-converter/index'
-import ImageProcessor from './pages/image-processor/index'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/locale/zh_CN'
+import { Route, Routes } from 'react-router-dom'
+import { SearchProvider } from '@/context/SearchContext'
+import { RootLayout } from '@/components/layout/RootLayout'
+import { antdTheme } from '@/styles/theme'
+import { AboutPage } from '@/pages/AboutPage'
+import { CategoriesPage } from '@/pages/CategoriesPage'
+import { ChangelogPage } from '@/pages/ChangelogPage'
+import { HomePage } from '@/pages/HomePage'
+import { LinksPage } from '@/pages/LinksPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
 
-const ScrollToTop = () => {
-  const { pathname } = useLocation()
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [pathname])
-  return null
-}
-
-const App = () => {
+export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="min-h-screen">
-        {/* Global animated atmosphere */}
-        <div className="bg-pattern" />
-        <div className="mesh-orb mesh-orb-1" />
-        <div className="mesh-orb mesh-orb-2" />
-        <div className="mesh-orb mesh-orb-3" />
-        <div className="scanline" />
-        <div className="grain" />
-        <Header />
-        <div className="pt-16 relative" style={{ zIndex: 3 }}>
-          <div className="page-container">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/lab" element={<Lab />} />
-              <Route path="/file-converter" element={<FileConverter />} />
-              <Route path="/image-processor" element={<ImageProcessor />} />
-            </Routes>
-          </div>
-        </div>
-      </div>
-    </Router>
+    <ConfigProvider theme={antdTheme} locale={zhCN}>
+      <SearchProvider>
+        <Routes>
+          <Route element={<RootLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="links" element={<LinksPage />} />
+            <Route path="categories" element={<CategoriesPage />} />
+            <Route path="changelog" element={<ChangelogPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </SearchProvider>
+    </ConfigProvider>
   )
 }
-
-export default App
