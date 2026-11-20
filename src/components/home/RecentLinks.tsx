@@ -7,21 +7,21 @@ export function RecentLinks() {
   const copy = homeSections.recent
 
   return (
-    <section className="shell pb-16">
+    <section className="shell pb-20">
       <SectionHead
         eyebrow={copy.eyebrow}
         title={fill(copy.title, templateVars)}
         more={copy.more && copy.moreTo ? { label: fill(copy.more, templateVars), to: copy.moreTo } : undefined}
       />
 
-      <div className="card-surface mt-7 divide-y divide-line-soft overflow-hidden">
+      <div className="mt-8 divide-y divide-line-soft overflow-hidden rounded-[20px] border border-line bg-surface shadow-float">
         {recentLinks.map((link) => (
           <a
             key={link.id}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-canvas sm:h-[70px] sm:py-0"
+            className="group flex items-center gap-5 px-7 py-4 transition-colors hover:bg-[#FAFBFD] sm:h-[72px] sm:py-0"
           >
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[15px] font-medium leading-[21px] text-ink">{link.name}</span>

@@ -16,8 +16,12 @@ export function AboutPage() {
       <PageHead eyebrow={copy.eyebrow} title={copy.title} />
 
       <div className="shell -mt-2">
-        <p className="max-w-[900px] font-serif text-[19px] leading-[34px] tracking-[0.01em] text-ink sm:text-[25px] sm:leading-[44px]">
-          {copy.lead}
+        <p className="max-w-[860px] font-serif text-[19px] leading-[32px] tracking-[0.01em] text-ink sm:text-[24px] sm:leading-[40px] lg:text-[26px] lg:leading-[44px]">
+          {copy.lead.map((line) => (
+            <span key={line} className="inline lg:block">
+              {line}
+            </span>
+          ))}
         </p>
       </div>
 
@@ -42,7 +46,7 @@ export function AboutPage() {
       </div>
 
       <section id="contact" className="shell mt-16 scroll-mt-28">
-        <div className="card-surface flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between sm:px-[30px] sm:py-[26px]">
+        <div className="card-surface flex flex-col gap-5 p-6 shadow-float sm:flex-row sm:items-center sm:justify-between sm:px-[30px] sm:py-[26px]">
           <div className="space-y-1.5">
             <p className="text-[16px] font-medium text-ink">{copy.contactTitle}</p>
             <p className="text-[13px] leading-[20px] text-ink-muted">{copy.contactDesc}</p>

@@ -88,7 +88,8 @@ export interface PageCopy {
   about: {
     eyebrow: string
     title: string
-    lead: string
+    /** 导语：数组里每一项是桌面端的一行，留空则自动折行 */
+    lead: string[]
     heading: string
     paragraphs: string[]
     contactTitle: string

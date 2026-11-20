@@ -18,7 +18,7 @@ function ScrollToTop() {
 
 export function RootLayout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
       <ScrollToTop />
       <SiteHeader />
       <main className="flex-1">

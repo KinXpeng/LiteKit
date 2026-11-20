@@ -84,7 +84,7 @@ export function CommandPalette() {
               onClick={() => openLink(link.url)}
               className={[
                 'flex w-full items-center gap-3 px-[15px] py-3 text-left transition-colors',
-                index === activeIndex ? 'bg-accent-soft' : 'hover:bg-canvas',
+                index === activeIndex ? 'bg-accent-soft' : 'hover:bg-[#FAFBFD]',
               ].join(' ')}
             >
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-surface text-[11px] font-medium text-ink-muted ring-1 ring-line">
@@ -101,7 +101,7 @@ export function CommandPalette() {
           ))}
         </div>
 
-        <div className="flex items-center justify-between border-t border-line-soft bg-[#F7F8FA] px-[15px] py-2.5">
+        <div className="flex items-center justify-between border-t border-line-soft bg-[#FAFBFD] px-[15px] py-2.5">
           <span className="font-mono text-[10px] tracking-[0.04em] text-ink-faint">↑ ↓ 选择</span>
           <span className="font-mono text-[10px] tracking-[0.04em] text-ink-faint">ENTER 打开</span>
         </div>

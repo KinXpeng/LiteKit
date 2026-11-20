@@ -1,27 +1,31 @@
 import type { ThemeConfig } from 'antd'
 
-/** Ant Design 主题：把设计稿的中性色系接进 antd token */
+/**
+ * Ant Design 主题：把 v3 的中性色系接进 antd token。
+ * 这里的值必须和 tailwind.config.js 保持一致，否则弹窗 / 输入框会和页面脱节。
+ */
 export const antdTheme: ThemeConfig = {
   token: {
-    colorPrimary: '#2F6BFF',
-    colorText: '#16181D',
-    colorTextSecondary: '#5B6270',
-    colorTextPlaceholder: '#9BA1AB',
-    colorBorder: '#E7E8ED',
-    colorBorderSecondary: '#F2F3F6',
+    colorPrimary: '#3157FF',
+    colorText: '#0A0B0D',
+    colorTextSecondary: '#5A6070',
+    colorTextPlaceholder: '#98A0AE',
+    colorBorder: '#EFF1F4',
+    colorBorderSecondary: '#F4F5F8',
     colorBgContainer: '#FFFFFF',
-    borderRadius: 10,
-    borderRadiusLG: 14,
+    borderRadius: 12,
+    borderRadiusLG: 18,
     controlHeight: 40,
     fontFamily: '"Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif',
     fontSize: 13,
     boxShadow: 'none',
+    boxShadowSecondary: '0 40px 80px -24px rgba(13, 23, 71, 0.13), 0 8px 20px -6px rgba(13, 23, 71, 0.06)',
   },
   components: {
     Input: {
       activeShadow: 'none',
       hoverBorderColor: '#C9CED8',
-      activeBorderColor: '#16181D',
+      activeBorderColor: '#0A0B0D',
       paddingInline: 14,
       fontSize: 13,
     },
@@ -31,21 +35,21 @@ export const antdTheme: ThemeConfig = {
       fontWeight: 500,
     },
     Modal: {
-      borderRadiusLG: 16,
+      borderRadiusLG: 18,
       paddingContentHorizontalLG: 0,
     },
     Tag: {
-      defaultBg: '#F2F3F6',
-      defaultColor: '#5B6270',
+      defaultBg: '#F5F6F8',
+      defaultColor: '#5A6070',
     },
     Empty: {
-      colorTextDescription: '#9BA1AB',
+      colorTextDescription: '#98A0AE',
     },
     Divider: {
-      colorSplit: '#E7E8ED',
+      colorSplit: '#EFF1F4',
     },
     Tooltip: {
-      colorBgSpotlight: '#16181D',
+      colorBgSpotlight: '#0A0B0D',
     },
   },
 }

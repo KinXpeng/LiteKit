@@ -11,9 +11,10 @@ interface SectionHeadProps {
 export function SectionHead({ eyebrow, title, more }: SectionHeadProps) {
   return (
     <div className="flex items-end justify-between gap-6">
-      <div className="space-y-3">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="font-serif text-[26px] leading-[36px] tracking-[0.02em] text-ink sm:text-[34px] sm:leading-[46px]">
+      <div>
+        <span className="accent-rule" />
+        <p className="eyebrow mt-3.5">{eyebrow}</p>
+        <h2 className="mt-3 font-serif text-[26px] leading-[36px] tracking-[0.02em] text-ink sm:text-[34px] sm:leading-[46px]">
           {title}
         </h2>
       </div>

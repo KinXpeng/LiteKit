@@ -13,7 +13,7 @@
   }
 
   ::selection {
-    background: rgba(47, 107, 255, 0.16);
+    background: rgba(49, 87, 255, 0.14);
   }
 
   a {
@@ -31,24 +31,38 @@
     @apply font-mono text-[11px] font-medium tracking-label text-ink-faint;
   }
 
+  /* 灰线只用在「必须分割」的地方，卡片靠阴影分层 */
   .rule {
     @apply h-px w-full bg-line;
   }
 
+  /* v3 卡片：纯白 + 极浅描边 + 双层柔影 */
   .card-surface {
-    @apply rounded-[14px] border border-line bg-surface;
+    @apply rounded-[18px] border border-line bg-surface shadow-card;
   }
 
   .btn-dark {
-    @apply inline-flex h-[52px] items-center justify-center gap-2.5 rounded-[10px] bg-ink px-5 text-[15px] font-medium text-canvas transition-colors duration-200 hover:bg-[#24272E];
+    @apply inline-flex h-[56px] items-center justify-center gap-2.5 rounded-[14px] bg-ink px-6 text-[15px] font-medium text-white shadow-glow transition-colors duration-200 hover:bg-[#1B1E26];
   }
 
   .btn-ghost {
-    @apply inline-flex h-[52px] items-center justify-center rounded-[10px] border border-[#DBDDE3] bg-surface px-5 text-[15px] text-ink transition-colors duration-200 hover:border-ink;
+    @apply inline-flex h-[56px] items-center justify-center rounded-[14px] border border-[#E6E8EE] bg-surface px-6 text-[15px] text-ink shadow-lift transition-colors duration-200 hover:border-ink;
   }
 
   .btn-dark-sm {
-    @apply inline-flex h-10 items-center justify-center gap-2 rounded-[10px] bg-ink px-4 text-[13px] font-medium text-canvas transition-colors duration-200 hover:bg-[#24272E];
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-[13px] font-medium text-white shadow-glow transition-colors duration-200 hover:bg-[#1B1E26];
+  }
+
+  /* 区块标题上方的短线 —— 纯色，不用渐变，靠粗细和留白说话 */
+  .accent-rule {
+    @apply block h-[2px] w-10 rounded-full bg-accent;
+  }
+
+  /* 首屏背景的技术网格：1px 细线，只在 lg 以上出现 */
+  .grid-backdrop {
+    background-image: linear-gradient(to right, #edf0f5 1px, transparent 1px),
+      linear-gradient(to bottom, #edf0f5 1px, transparent 1px);
+    background-size: 80px 86.67px;
   }
 }
 
@@ -70,7 +84,7 @@
 
 .chip-tag.ant-tag-checkable-checked,
 .chip-tag.ant-tag-checkable-checked:hover {
-  @apply border-ink bg-ink text-canvas;
+  @apply border-ink bg-ink text-white;
 }
 
 .ant-modal-mask {

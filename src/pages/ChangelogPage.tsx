@@ -10,16 +10,12 @@ export function ChangelogPage() {
 
   return (
     <div className="pb-20">
-      <PageHead
-        eyebrow={fill(copy.eyebrow, templateVars)}
-        title={copy.title}
-        desc={copy.desc}
-      />
+      <PageHead eyebrow={fill(copy.eyebrow, templateVars)} title={copy.title} desc={copy.desc} />
 
       <div className="shell">
-        <div className="divide-y divide-line border-t border-line">
+        <div className="card-surface divide-y divide-line-soft overflow-hidden">
           {groups.map(([date, entries]) => (
-            <div key={date} className="grid gap-4 py-7 sm:grid-cols-[96px_1fr] sm:gap-12">
+            <div key={date} className="grid gap-4 px-7 py-7 sm:grid-cols-[96px_1fr] sm:gap-12">
               <span className="font-mono text-[11px] tracking-[0.06em] text-ink-faint">{formatDate(date)}</span>
 
               <div className="space-y-4">
@@ -35,7 +31,7 @@ export function ChangelogPage() {
                     </span>
                     <span
                       className={[
-                        'w-[150px] shrink-0 truncate text-[15px] font-medium sm:w-[200px]',
+                        'w-[150px] shrink-0 truncate text-[15px] font-medium sm:w-[190px]',
                         entry.type === 'remove' ? 'text-ink-muted' : 'text-ink',
                       ].join(' ')}
                     >

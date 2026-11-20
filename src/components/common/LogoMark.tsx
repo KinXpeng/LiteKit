@@ -2,8 +2,8 @@ import { site } from '@/config'
 
 /** 品牌标：深色圆角方块 + 三根递减横线（= 一份清单） */
 export function LogoMark({ size = 30, inverted = false }: { size?: number; inverted?: boolean }) {
-  const bg = inverted ? '#FAFAFB' : '#16181D'
-  const fg = inverted ? '#16181D' : '#FAFAFB'
+  const bg = inverted ? '#FFFFFF' : '#0A0B0D'
+  const fg = inverted ? '#0A0B0D' : '#FFFFFF'
 
   return (
     <svg

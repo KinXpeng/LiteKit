@@ -9,7 +9,7 @@ export function LinkRow({ link }: { link: LinkItem }) {
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-canvas md:h-[58px] md:px-[22px] md:py-0"
+      className="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-[#FAFBFD] md:h-[58px] md:px-[22px] md:py-0"
     >
       <span className="flex min-w-0 flex-1 flex-col gap-0.5 md:flex-row md:items-center md:gap-5">
         <span className="truncate text-[15px] font-medium leading-[21px] text-ink md:w-[170px] md:shrink-0">

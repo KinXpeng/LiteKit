@@ -9,7 +9,9 @@ export function LinkTable({ groups }: { groups: CategoryGroup[] }) {
         <section key={category.id}>
           <div className="mb-3 flex items-baseline gap-2.5">
             <h2 className="text-[17px] font-medium text-ink">{category.name}</h2>
-            <span className="font-mono text-[11px] tracking-[0.08em] text-ink-faint">{links.length}</span>
+            <span className="font-mono text-[11px] tracking-[0.08em] text-ink-faint">
+              {String(links.length).padStart(2, '0')}
+            </span>
           </div>
           <div className="card-surface divide-y divide-line-soft overflow-hidden">
             {links.map((link) => (

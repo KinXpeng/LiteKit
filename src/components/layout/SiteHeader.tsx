@@ -15,10 +15,10 @@ export function SiteHeader() {
   const { openPalette } = useSearchPalette()
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/85 backdrop-blur">
-      <div className="shell flex h-[78px] items-center justify-between gap-6">
+    <header className="sticky top-0 z-40 border-b border-line bg-white/85 backdrop-blur">
+      <div className="shell flex h-20 items-center justify-between gap-6">
         <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label={site.brandFull}>
-          <LogoMark />
+          <LogoMark size={32} />
           <span className="flex flex-col">
             <span className="font-serif text-[19px] leading-6 font-semibold tracking-[0.05em] text-ink">
               {site.name}
@@ -41,7 +41,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={openPalette}
-            className="hidden h-10 w-[214px] items-center justify-between rounded-[10px] border border-line bg-surface px-3 text-[13px] text-ink-faint transition-colors hover:border-[#C9CED8] lg:flex"
+            className="hidden h-10 w-[214px] items-center justify-between rounded-xl border border-line bg-surface px-3 text-[13px] text-ink-faint shadow-lift transition-colors hover:border-[#C9CED8] lg:flex"
           >
             <span className="flex items-center gap-2">
               <IconSearch />
