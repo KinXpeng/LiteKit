@@ -2,12 +2,20 @@ import { Link } from 'react-router-dom'
 import { site, templateVars } from '@/config'
 import { fill } from '@/lib/format'
 import { IconArrowRight } from '@/components/common/icons'
+import { HeroPattern } from '@/components/common/Patterns'
 import { PalettePreview } from './PalettePreview'
 
 export function Hero() {
   return (
-    <section className="shell flex flex-col gap-12 pt-10 pb-16 lg:flex-row lg:items-center lg:gap-14 lg:pt-24 lg:pb-28">
-      <div className="w-full space-y-7 lg:max-w-[700px]">
+    <section className="shell relative flex flex-col gap-12 pt-10 pb-16 lg:flex-row lg:items-center lg:gap-14 lg:pt-24 lg:pb-28">
+      {/* 右侧图案：满铺网格 + 同心弧，压在搜索卡下面；超出首屏的部分直接裁掉 */}
+      <div className="pointer-events-none absolute inset-0 hidden overflow-hidden xl:block">
+        <div className="absolute right-0 top-0">
+          <HeroPattern />
+        </div>
+      </div>
+
+      <div className="relative w-full space-y-7 lg:max-w-[700px]">
         <span className="inline-flex h-8 items-center gap-2.5 rounded-full border border-line bg-surface px-3.5 shadow-lift">
           <span className="h-[7px] w-[7px] rounded-full bg-accent" />
           <span className="text-[12px] font-medium tracking-[0.02em] text-ink-muted">
@@ -38,12 +46,7 @@ export function Hero() {
         <p className="font-mono text-[11px] tracking-[0.08em] text-ink-faint">{site.hero.metaLine}</p>
       </div>
 
-      {/* 搜索卡外圈铺一层 1px 网格：给首屏一点「图纸感」，卡片压在网格上面 */}
       <div className="relative w-full max-w-[420px] shrink-0">
-        <div
-          aria-hidden
-          className="grid-backdrop pointer-events-none absolute -inset-x-[110px] -inset-y-[46px] hidden xl:block"
-        />
         <PalettePreview />
       </div>
     </section>

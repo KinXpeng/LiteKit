@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { categoryGroups, homeSections, templateVars } from '@/config'
 import { domainOf, fill } from '@/lib/format'
 import { SectionHead } from '@/components/common/SectionHead'
+import { IconPlus } from '@/components/common/icons'
 
 export function CategoryGrid() {
   const copy = homeSections.categories
@@ -21,9 +22,15 @@ export function CategoryGrid() {
             to={`/links?category=${category.id}`}
             className="card-surface group flex flex-col gap-3.5 p-7 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-float"
           >
-            <span className="font-mono text-[11px] font-medium tracking-[0.08em] text-ink-ghost">
-              {String(index + 1).padStart(2, '0')}
-            </span>
+            <div className="flex items-start justify-between">
+              <span className="font-mono text-[11px] font-medium leading-[15px] tracking-[0.08em] text-ink-ghost">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <IconPlus
+                size={10}
+                className="mt-[2px] text-ink-ghost transition-colors duration-200 group-hover:text-accent"
+              />
+            </div>
             <h3 className="text-[20px] font-medium leading-[27px] text-ink">{category.name}</h3>
             <p className="text-[13px] leading-[21px] text-ink-muted">{category.description}</p>
             <p className="mt-1 truncate font-mono text-[10px] tracking-[0.02em] text-ink-faint">

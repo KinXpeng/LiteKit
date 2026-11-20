@@ -58,11 +58,20 @@
     @apply block h-[2px] w-10 rounded-full bg-accent;
   }
 
-  /* 首屏背景的技术网格：1px 细线，只在 lg 以上出现 */
-  .grid-backdrop {
-    background-image: linear-gradient(to right, #edf0f5 1px, transparent 1px),
-      linear-gradient(to bottom, #edf0f5 1px, transparent 1px);
-    background-size: 80px 86.67px;
+  /* 深色区域上的图案网格：间距更密、对比更低，只做质感不做装饰 */
+  .grid-backdrop-dark {
+    background-image: linear-gradient(to right, #171b22 1px, transparent 1px),
+      linear-gradient(to bottom, #171b22 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* 通栏草点线：做分区用的，比 1px 实线轻，又不至于像装饰 */
+  .dot-rule {
+    height: 3px;
+    background-image: radial-gradient(circle, #cfd5df 1px, transparent 1.05px);
+    background-size: 12px 3px;
+    background-repeat: repeat-x;
+    background-position: 0 center;
   }
 }
 

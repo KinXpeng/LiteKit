@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { categories, latestChangeDate, nav, site, totalLinks } from '@/config'
 import { formatDate } from '@/lib/format'
+import { FooterPattern } from '@/components/common/Patterns'
 
 interface FooterItem {
   label: string
@@ -50,8 +51,9 @@ export function SiteFooter() {
   const pageItems: FooterItem[] = nav.map((item) => ({ label: item.label, to: item.to }))
 
   return (
-    <footer className="bg-deep">
-      <div className="shell pt-16 pb-12 sm:pt-[76px] sm:pb-14">
+    <footer className="relative overflow-hidden bg-deep">
+      <FooterPattern />
+      <div className="relative shell pt-16 pb-12 sm:pt-[76px] sm:pb-14">
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between">
           <div className="max-w-[340px] space-y-4">
             <p className="font-serif text-[17px] font-semibold tracking-[0.03em] text-white">{site.brandFull}</p>
