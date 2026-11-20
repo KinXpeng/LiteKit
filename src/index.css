@@ -67,9 +67,9 @@
 
   /* 通栏草点线：做分区用的，比 1px 实线轻，又不至于像装饰 */
   .dot-rule {
-    height: 3px;
-    background-image: radial-gradient(circle, #cfd5df 1px, transparent 1.05px);
-    background-size: 12px 3px;
+    height: 4px;
+    background-image: radial-gradient(circle, #c9d0db 1.4px, transparent 1.45px);
+    background-size: 10px 4px;
     background-repeat: repeat-x;
     background-position: 0 center;
   }
